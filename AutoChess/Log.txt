@@ -1,0 +1,19 @@
+TODO:
+
+Pawn promotion
+Pawn impassante
+Castling
+
+Unit testes
+
+Create Builder for ChessState?
+
+Terminal test function
+Heuristic function
+
+Parallel programming adaption
+
+///////////////
+Reason for using unordered_map for board state. 
+	- Finding the king at the beginning of the terminal function.
+	- Searching for each piece during 
