@@ -1,8 +1,5 @@
-// AlphaBetaDll.cpp : Defines the exported functions for the DLL application.
-//
-
 #include "stdafx.h"
-#include <vector>
+#include <list>
 
 
 /// State class must include the current game board state, current teams turn and 
@@ -31,6 +28,6 @@ protected:
 	virtual bool terminalTest(State);
 
 	// Returns a list of all the next possible states from a current give state.
-	virtual std::vector<State> nextMoves(State);
+	virtual std::list<State> nextMoves(State);
 };
 

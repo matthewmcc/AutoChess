@@ -23,24 +23,69 @@
 /// Current turn is either equal to 'W' or 'B'
 
 /// Black is represented by lower case (DEC ASCII 97 >=) and White by UPPERCASE (DEC ASCII 90 =<).
+#include "ChessMove.h"
+#include "constAutoChess.h"
 
 #pragma once
-class ChessState
-{
-public:
-	// Initializes the new state as the game start state
-	ChessState();
-	ChessState(char *state, int *lastMove);
-	~ChessState();
+namespace AutoChess {
+	class ChessState
+	{
+	public:
+		// Initializes the new state as the game start state
+		static ChessState CreateStartState(bool isMaxPlayer);
+		// Creates a new state given the current board state and a move to do.
+		ChessState CreateNextState(ChessMove moveToDo);
 
-	void initNewBoard();
+		void copyBoardState(ChessState stateToCopy);
 
-	char boardState[8][8];// [8][8];
-	int lastMove[2][2];// [2][2];
-	char movePlayer;
-	int heuristicVal; 
-	bool maxPlayer;
-};
+		bool maxPlayer;
 
+		/// Gets and sets for memeber variables
+		inline ChessMove getLastMove() { return LastMove; };
 
+		char getBoardTile(ChessTile tile) { return BoardState[tile.getX][tile.getY]; };
+		char getBoardTile(int x, int y) { return BoardState[x][y]; };
 
+		void setBoardTile(ChessTile tile, char newTileState) { BoardState[tile.getX][tile.getY] = newTileState; };
+		void setBoardTile(int x, int y, char newTileState) { BoardState[x][y] = newTileState; };
+
+		char getBoardTile(ChessTile tile) { BoardState[tile.getX][til e.getY]; };
+		void setBoardTile(ChessTile tile, char newTileState) {
+			BoardState[tile.getX][tile.getY] = newTileState;
+		};
+
+		inline char getWhichPlayersTurn() { return WhichPlayersTurn; };
+
+		inline int getHeuristsValue() { return HeuristicVal; };
+		inline void setHeuristsValue(int heuristValue) { HeuristicVal = heuristValue; };
+
+		inline bool isMaxPlayer() { return IsMaxPlayer; };
+	private:
+		ChessState();
+		char BoardState[8][8];
+		ChessMove LastMove;
+		char WhichPlayersTurn;
+		int HeuristicVal;
+		bool IsMaxPlayer;
+
+		void initNewBoard();
+
+		static const char WHITE_PLAYER = 'W';
+		static const char BLACK_PLAYER = 'B';
+
+		void setLastMove(ChessMove lastMove) { LastMove = lastMove; };
+		void makeMove(ChessMove move);
+
+		inline char setWhichPlayersTurn(char whichPlayersTurn) { WhichPlayersTurn = whichPlayersTurn; };
+		inline void setTurnToNextPlayer() {
+			if (WhichPlayersTurn == BLACK_PLAYER)
+				WhichPlayersTurn = WHITE_PLAYER;
+			else
+				WhichPlayersTurn = BLACK_PLAYER;
+
+			IsMaxPlayer = !IsMaxPlayer;
+		};
+
+		inline void setIsMaxPlayer(bool isMaxPlayer) { IsMaxPlayer = isMaxPlayer; };
+	};
+}

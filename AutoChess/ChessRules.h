@@ -1,69 +1,67 @@
+
+#pragma once  
+
+#ifdef AUTO_CHESS_EXPORTS  
+#define AUTO_CHESS_API __declspec(dllexport)   
+#else  
+#define AUTO_CHESS_API __declspec(dllimport)   
+#endif 
+
 #include "stdafx.h"
 #include "ChessState.h"
+#include "constAutoChess.h"
+
 #include <list>
 #include <map>
 
-class ChessRules
-{
-public:
-	static ChessRules& getInstance();
+namespace AutoChess {
+	class AUTO_CHESS_API ChessRules
+	{
+	public:
+		static ChessRules& getInstance();
 
-	std::list<ChessState> getMoves(ChessState &, int*);
+		// If this returns zero moves if the game is in an terminal state.
+		std::list<ChessState> getMoves(ChessState &);
 
-	bool terminalTest(ChessState &);
+	private:
+		// Singleton functions
+		ChessRules();
+		~ChessRules();
+		ChessRules(const ChessRules &);
+		const ChessRules & operator = (const ChessRules &);
 
-private:
-	// Singleton functions
-	ChessRules();
-	~ChessRules();
-	ChessRules(const ChessRules &);
-	const ChessRules & operator = (const ChessRules &);
+		/// These functions are divided by piece color for effiency.
+		inline std::list<ChessState> getBlackMoves(ChessState &);
+		inline std::list<ChessState> getWhiteMoves(ChessState &);
 
-	const int KNIGHT_ARRAY_LENGTH = 8;
-	const int STRAIGHT_ARRAY_LENGTH = 4;
-	const int DIAGONAL_ARRAY_LENGTH = 4;
-	const int DIA_STRI_ARRAY_LENGTH = 8;
-	const int PAWN_MOVES = 2;
+		inline void getBlackPawnMoves(std::list<ChessState> &, ChessState &, int*);
+		inline void getWhitePawnMoves(std::list<ChessState> &, ChessState &, int*);
 
-	/// Possible moves of pieces
-	const int KINGHT_MOVES[8][2] = { {1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1} };
-	const int STRAIGHT_MOVES[4][2] = { {1, 0}, {0, 1}, {-1, 0}, {0, -1} };
-	const int DIAGONAL_MOVES[4][2] = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
-	const int DIA_STRI_MOVES[8][2] = { {1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
-	const int PAWN_ATTACK_MOVES_WHITE[2][2] = { {-1, -1}, {1, -1} };
-	const int PAWN_ATTACK_MOVES_BLACK[2][2] = { {-1, 1}, {1, 1} };
-	int PAWN_WHITE_MOVES[2][2] = { {0, -1}, {0, -2} };
-	int PAWN_BLACK_MOVES[2][2] = { { 0, 1 },{ 0, 2 } };
+		inline bool isWhiteInCheck(ChessState &, int*);
+		inline bool isBlackInCheck(ChessState &, int*);
 
-	const int BLACK_PAWN_START_ROW = 1;
-	const int WHITE_PAWN_START_ROW = 6;
+		// Get all possible moves for a piece of a certain type
+		inline void getRookMoves(std::list<ChessState> &, ChessState &, int*);
+		inline void getKnightMoves(std::list<ChessState> &, ChessState &, int*);
+		inline void getBishopMoves(std::list<ChessState> &, ChessState &, int*);
+		inline void getQueenMoves(std::list<ChessState> &, ChessState &, int*);
+		inline void getKingMoves(std::list<ChessState> &, ChessState &, int*);
 
-	std::map<char, int> PIECE_VALUES = { {'_', 0}, {'p', 1}, {'n', 3}, {'b', 3}, {'r', 5}, {'q', 9}, {'k', 100} };
+		inline ChessState createState(ChessState &state, ChessMove moveToMake);
 
-	// These functions are divided by piece color for effiency.
-	inline std::list<ChessState> getBlackMoves(ChessState &, int*);
-	inline std::list<ChessState> getWhiteMoves(ChessState &, int*);
+		
 
-	inline std::list<ChessState> getBlackPawnMoves(ChessState &, int*);
-	inline std::list<ChessState> getWhitePawnMoves(ChessState &, int*);
+		// Returns true if the current players in check.
+		bool isCurrPlayerInCheck(ChessState &, int* currKingLoc);
 
-	inline bool isWhiteInCheck(ChessState &, int*);
-	inline bool isBlackInCheck(ChessState &, int*);
+		// Removes any state from the list where the passed king is in a state of check.
+		// Only to be used when the king was in check the previous turn.
+		void removeCheckStates(std::list<ChessState> &moves, int* kingToCheck, char typeOfKing);
 
-	// Get all possible moves for a piece of a certain type
-	inline std::list<ChessState> getRookMoves(ChessState &, int*);
-	inline std::list<ChessState> getKnightMoves(ChessState &, int*);
-	inline std::list<ChessState> getBishopMoves(ChessState &, int*);
-	inline std::list<ChessState> getQueenMoves(ChessState &, int*);
-	inline std::list<ChessState> getKingMoves(ChessState &, int*);
+		// Gets a pieces location
+		inline int* getPieceLoc(ChessState &, char);
 
-	inline ChessState createState(ChessState &state, int* pieceToMove, int* move);
-	inline void makeMove(ChessState &state, int heurisVal, bool maxPlayer, char movePlay);
-
-	// Gets a pieces location
-	inline int* getPieceLoc(ChessState &, char);
-
-	// Checks if the emptyed move is on the board. 
-	inline bool inRange(int *);
-};
-
+		// Checks if the emptyed move is on the board. 
+		inline bool inRange(int *);
+	};
+}

@@ -91,7 +91,7 @@ bool AlphaBetaSearch<State>::terminalTest(State)
 };
 
 template<typename State>
-std::vector<State> AlphaBetaSearch<State>::nextMoves(State)
+std::list<State> AlphaBetaSearch<State>::nextMoves(State)
 {
 	return std::vector<State>();
 };

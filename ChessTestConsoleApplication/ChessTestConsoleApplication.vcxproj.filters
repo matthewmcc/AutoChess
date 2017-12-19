@@ -21,48 +21,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChessState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AlphaBetaSearch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChessRules.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AutoChess.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChessMove.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constAutoChess.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="ChessTestConsoleApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChessState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AlphaBetaSearch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChessRules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoBetaChess.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Log.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
 </Project>

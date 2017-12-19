@@ -2,55 +2,65 @@
 #include "ChessState.h"
 #include <algorithm>
 
+namespace AutoChess {
+	// Initializes the new state as the game start state
+	ChessState ChessState::CreateStartState(bool isMaxPlayer)
+	{
+		ChessState chessState = ChessState();
 
-ChessState::ChessState()
-{
-	initNewBoard();
-	movePlayer = 'W';
-	heuristicVal = 0;
-}
+		chessState.initNewBoard();
+		chessState.setWhichPlayersTurn(WHITE_PLAYER);
+		chessState.setHeuristsValue(0);
+		chessState.setIsMaxPlayer(isMaxPlayer);
+	}
 
-// Copys the state the board is been passed into a new one.
-ChessState::ChessState(char *state, int *move)
-{
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
-			boardState[i][j] = state[(i * 8) + j];
+	// Creates a new state given the current board state and a move to do.
+	ChessState ChessState::CreateNextState(ChessMove moveToDo)
+	{
+		ChessState newState = ChessState();
+
+		newState.copyBoardState(*this);
+		newState.makeMove(moveToDo);
+
+		return newState;
+	}
+
+	// Copies the board state to passed
+	void ChessState::copyBoardState(ChessState stateToCopy) {
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				setBoardTile(i, j, stateToCopy.getBoardTile(i, j));
+			}
 		}
 	}
 
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 8; j++) {
-			lastMove[i][j] = move[(i * 2) + j];
-		}
-	}
-}
+	void ChessState::makeMove(ChessMove move) {
+		char pieceToMove = getBoardTile(move.getMoveFromTile);
 
-ChessState::~ChessState()
-{
-}
+		setBoardTile(move.getMoveToTile, pieceToMove);
+		setBoardTile(move.getMoveFromTile, EMPTY_TILE);
 
-// If this is the first board created it'll have this structure.
-void ChessState::initNewBoard() 
-{
-	char bS[8][8] = { { 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r' },
-					{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-					{'_', '_', '_', '_', '_', '_', '_', '_'},
-					{'_', '_', '_', '_', '_', '_', '_', '_'},
-					{'_', '_', '_', '_', '_', '_', '_', '_'},
-					{'_', '_', '_', '_', '_', '_', '_', '_'},
-					{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-					{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'} };
-
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
-			boardState[i][j] = bS[i][j];
-		}
+		LastMove = move;
 	}
 
-	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 8; j++) {
-			lastMove[i][j] = ' ';
+	// If this is the first board created it'll have this structure.
+	void ChessState::initNewBoard()
+	{
+		char tempBoardState[8][8] = { { 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r' },
+						{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+						{'_', '_', '_', '_', '_', '_', '_', '_'},
+						{'_', '_', '_', '_', '_', '_', '_', '_'},
+						{'_', '_', '_', '_', '_', '_', '_', '_'},
+						{'_', '_', '_', '_', '_', '_', '_', '_'},
+						{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+						{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'} };
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				BoardState[i][j] = tempBoardState[i][j];
+			}
 		}
 	}
 }

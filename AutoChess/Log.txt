@@ -14,6 +14,7 @@ Heuristic function
 Parallel programming adaption
 
 ///////////////
-Reason for using unordered_map for board state. 
+Reasons for using unordered_map for board state. 
 	- Finding the king at the beginning of the terminal function.
-	- Searching for each piece during 
+	- Searching for each piece during make moves function
+	- 
