@@ -31,6 +31,8 @@ namespace AutoChess {
 	class ChessState
 	{
 	public:
+		ChessState() {};
+
 		// Initializes the new state as the game start state
 		static ChessState CreateStartState(bool isMaxPlayer);
 		// Creates a new state given the current board state and a move to do.
@@ -60,8 +62,19 @@ namespace AutoChess {
 		inline void setHeuristsValue(int heuristValue) { HeuristicVal = heuristValue; };
 
 		inline bool isMaxPlayer() { return IsMaxPlayer; };
+		inline bool isTileEmpty(ChessTile tile) {
+			return BoardState[tile.getX()][tile.getY()] == EMPTY_TILE;
+		};
+
+		inline bool isTilesPieceBlack(ChessTile tile) {
+			return BoardState[tile.getX()][tile.getY()] >= BLACKS_LOWEST_ASCII_VALUE;
+		};
+
+		inline bool isTilesPieceWhite(ChessTile tile) {
+			return BoardState[tile.getX()][tile.getY()] <= WHITES_HIGHEST_ASCII_VALUE;
+		};
+
 	private:
-		ChessState();
 		char BoardState[8][8];
 		ChessMove LastMove;
 		char WhichPlayersTurn;

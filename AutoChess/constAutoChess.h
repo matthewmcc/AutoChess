@@ -7,20 +7,23 @@ namespace AutoChess {
 	const int STRAIGHT_MOVES[4][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 } };
 	const int DIAGONAL_MOVES[4][2] = { { 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
 	const int DIA_STRI_MOVES[8][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 },{ 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
-	const int PAWN_ATTACK_MOVES_WHITE[2][2] = { { -1, -1 },{ 1, -1 } };
-	const int PAWN_ATTACK_MOVES_BLACK[2][2] = { { -1, 1 },{ 1, 1 } };
-	int PAWN_WHITE_MOVES[2][2] = { { 0, -1 },{ 0, -2 } };
-	int PAWN_BLACK_MOVES[2][2] = { { 0, 1 },{ 0, 2 } };
+	const int WHITE_PAWNS_ATTACK_MOVES[2][2] = { { -1, -1 },{ 1, -1 } };
+	const int BLACK_PAWNS_ATTACK_MOVES[2][2] = { { -1, 1 },{ 1, 1 } };
+	int WHITE_PAWNS_MOVES[2][2] = { { 0, -1 },{ 0, -2 } };
+	int BLACK_PAWNS_MOVES[2][2] = { { 0, 1 },{ 0, 2 } };
 
 	/// Lengths of all the arrays above.
 	const int KNIGHT_ARRAY_LENGTH = 8;
 	const int STRAIGHT_ARRAY_LENGTH = 4;
 	const int DIAGONAL_ARRAY_LENGTH = 4;
 	const int DIA_STRI_ARRAY_LENGTH = 8;
-	const int PAWN_MOVES = 2;
+	const int PAWN_MOVES_ARRAY_LENGTH = 2;
 
 	const int BLACK_PAWN_START_ROW = 1;
 	const int WHITE_PAWN_START_ROW = 6;
+
+	const int BLACKS_LOWEST_ASCII_VALUE = 90;
+	const int WHITES_HIGHEST_ASCII_VALUE = 97;
 
 	// Player declarers
 	const char WHITE_PLAYER = 'W';

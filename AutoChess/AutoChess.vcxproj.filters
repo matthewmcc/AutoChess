@@ -39,6 +39,12 @@
     <ClInclude Include="constAutoChess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PawnMoves.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RookMoves.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AutoBetaChess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PawnMoves.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RookMoves.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

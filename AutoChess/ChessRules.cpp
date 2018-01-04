@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "ChessRules.h"
+#include "ChessMove.h"
+#include "PawnMoves.h"
+
 #include <algorithm>
 #include <list>
 
@@ -58,10 +61,8 @@ namespace AutoChess {
 			return isWhiteInCheck(currState, kingLoc);
 	}
 
-	std::list<ChessState> ChessRules::getWhiteMoves(ChessState &currState)
+	std::list<ChessState> ChessRules::getWhiteMoves(ChessState &currentState)
 	{
-		int pieceToMove[2];
-
 		char pieceType;
 		std::list<ChessState> moves = std::list<ChessState>();
 
@@ -70,16 +71,16 @@ namespace AutoChess {
 		{
 			for (int j = 0; j < 8; j++) 
 			{
-				pieceType = currState.getBoardTile(i, j);
+				pieceType = currentState.getBoardTile(i, j);
 				if (pieceType <= 90) {
-					pieceToMove[0] = i;
-					pieceToMove[1] = j;
+					ChessTile pieceToMove = ChessTile(i, j);
 
 					// Calls the correct move function given the piece to move.
 					switch (pieceType)
 					{
 					case WHITE_PAWN: {
-						getWhitePawnMoves(moves, currState, pieceToMove);
+						PawnMoves pawnMoves = PawnMoves(currentState, pieceToMove);
+						moves.merge(pawnMoves.getWhitePawnMoves());
 						break;
 					}
 					case WHITE_ROOK: {
@@ -112,10 +113,8 @@ namespace AutoChess {
 		return moves;
 	}
 
-	std::list<ChessState> ChessRules::getBlackMoves(ChessState &currState)
+	std::list<ChessState> ChessRules::getBlackMoves(ChessState &currentState)
 	{
-		int pieceToMove[2];
-
 		char pieceType;
 		std::list<ChessState> moves = std::list<ChessState>();
 
@@ -124,16 +123,16 @@ namespace AutoChess {
 		{
 			for (int j = 0; j < 8; j++) 
 			{
-				pieceType = currState.getBoardTile(i, j);
+				pieceType = currentState.getBoardTile(i, j);
 				if (pieceType >= 97) {
-					pieceToMove[0] = i;
-					pieceToMove[1] = j;
+					ChessTile pieceToMove = ChessTile(i, j);				
 
 					// Calls the correct move funciton given the piece to move.
 					switch (pieceType)
 					{
 					case BLACK_PAWN: {
-						getBlackPawnMoves(moves, currState, pieceToMove);
+						PawnMoves pawnMoves = PawnMoves(currentState, pieceToMove);
+						moves.merge(pawnMoves.getBlackPawnMoves());
 						break;
 					}
 					case BLACK_ROOK: {
@@ -166,102 +165,10 @@ namespace AutoChess {
 		return moves;
 	}
 
-	/// Given the current state and the current black pawn to move. All possible states are calculated and returned.
-	inline void ChessRules::getBlackPawnMoves(std::list<ChessState> &moves, ChessState &currState, int *pawnToMove)
-	{
-		int moveTo[2];
-
-		char movingPiece = currState.getBoardTile(pawnToMove[0], pawnToMove[1]);
-
-		if (currState.getBoardTile(pawnToMove[0], pawnToMove[1] + 1) == EMPTY_TILE) {
-			moves.push_back(createState(currState, pawnToMove, *PAWN_BLACK_MOVES));
-		}
-
-		// Checks if the pawn is in the first position.
-		if (pawnToMove[1] = BLACK_PAWN_START_ROW) {
-			moves.push_back(createState(currState, pawnToMove, *PAWN_BLACK_MOVES + 2));
-		}
-
-		// Checks if either of the pawn offensive moves are viable.
-		for (int i = 0; i < PAWN_MOVES; i++) 
-		{
-			moveTo[0] = pawnToMove[0] + (PAWN_ATTACK_MOVES_BLACK[i][0]);
-			moveTo[1] = pawnToMove[1] + (PAWN_ATTACK_MOVES_BLACK[i][1]);
-
-			if (inRange(moveTo)) {
-				if (currState.getBoardTile(moveTo[0], moveTo[1]) <= 90)
-					moves.push_back(createState(currState, pawnToMove, moveTo));
-			}
-		}
-	}
-
-	/// Given the current state and the current white pawn to move. All possible states are calculated and returned.
-	inline void ChessRules::getWhitePawnMoves(std::list<ChessState> &moves, ChessState &currState, int *pawnToMove)
-	{
-		int moveTo[2];
-
-		char movingPiece = currState.getBoardTile(pawnToMove[0], pawnToMove[1]);
-
-		if (currState.getBoardTile(pawnToMove[0], pawnToMove[1] + 1) == EMPTY_TILE) {
-			moves.push_back(createState(currState, pawnToMove, *PAWN_WHITE_MOVES));
-		}
-
-		// Checks if the pawn is in the first position.
-		if (pawnToMove[1] = WHITE_PAWN_START_ROW) {
-			moves.push_back(createState(currState, pawnToMove, *PAWN_WHITE_MOVES + 2));
-		}
-
-		// Checks if either of the pawn offensive moves are viable.
-		for (int i = 0; i < PAWN_MOVES; i++) 
-		{
-			moveTo[0] = pawnToMove[0] + (PAWN_ATTACK_MOVES_WHITE[i][0]);
-			moveTo[1] = pawnToMove[1] + (PAWN_ATTACK_MOVES_WHITE[i][1]);
-
-			if (inRange(moveTo)) {
-				if (currState.getBoardTile(moveTo[0], moveTo[1]) >= 97)
-					moves.push_back(createState(currState, pawnToMove, moveTo));
-			}
-		}
-	}
-
 	/// Given the current state and the current rook to move. All possible states are calculated and returned.
 	inline void ChessRules::getRookMoves(std::list<ChessState> &moves, ChessState &currState, int *rookToMove)
 	{
-		int moveTo[2];
-		int multipler;
 
-		char movingPiece = currState.getBoardTile(rookToMove[0], rookToMove[1]);
-		char movingTo;
-
-		/// Checks all possible straight moves
-		for (int i = 0; i < STRAIGHT_ARRAY_LENGTH; i++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = rookToMove[0] + (STRAIGHT_MOVES[i][0] * multipler);
-			moveTo[1] = rookToMove[1] + (STRAIGHT_MOVES[i][1] * multipler);
-
-			while (inRange(moveTo)) 
-			{
-				movingTo = currState.getBoardTile(moveTo[0], moveTo[1]);
-				// Checks if the square been moved to is free or if the pieces involved are different case.
-				if (movingTo == EMPTY_TILE) {
-					moves.push_back(createState(currState, rookToMove, moveTo));
-				}
-				else if ((isupper(movingTo) ^ isupper(movingPiece))) {
-					moves.push_back(createState(currState, rookToMove, moveTo));
-
-					break;
-				}
-				else
-					break;
-
-				multipler++;
-
-				moveTo[0] = rookToMove[0] + (STRAIGHT_MOVES[i][0] * multipler);
-				moveTo[1] = rookToMove[1] + (STRAIGHT_MOVES[i][1] * multipler);
-			}
-		}
 	}
 
 	/// Given the current state and the current kinght to move. All possible states are calculated and returned.
@@ -556,8 +463,6 @@ namespace AutoChess {
 	/// Creates a new state given a board state and a move to make then returns it.
 	inline ChessState ChessRules::createState(ChessState &state, ChessMove moveToMake) {
 		ChessState newState = state.CreateNextState(moveToMake);
-		
-		
 
 		return newState;
 	}
@@ -567,6 +472,7 @@ namespace AutoChess {
 
 		
 	}
+
 
 	// Removes any state from the list where the passed king is in a state of check.
 	// Only to be used when the king was in check the previous turn.
@@ -631,16 +537,5 @@ namespace AutoChess {
 		}
 
 		return nullptr;
-	}
-
-	// Checks if a position to move to is in range
-	inline bool ChessRules::inRange(int * pos)
-	{
-		if (pos[0] < 8 && pos[0] >= 0
-			&& pos[1] < 8 && pos[1] >= 0) {
-			return true;
-		}
-
-		return false;
 	}
 }

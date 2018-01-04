@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #pragma once
 namespace AutoChess {
 	struct ChessTile
@@ -7,6 +9,8 @@ namespace AutoChess {
 		int Y;
 
 	public:
+		ChessTile();
+
 		ChessTile(int x, int y) {
 			setX(x);
 			setY(y);
@@ -16,15 +20,18 @@ namespace AutoChess {
 		int getY() { return Y; };
 		void setX(int x) { X = x; };
 		void setY(int y) { Y = y; };
+
+		// Checks this tile is in range of the game board.
+		bool isInBoardBounds() {
+			return  (X < 8 && X >= 0 && Y < 8 && Y >= 0);
+		};
 	};
 
-	struct ChessMove
+	class ChessMove
 	{
 	private:
 		ChessTile MoveFromTile;
 		ChessTile MoveToTile;
-
-		ChessMove();
 
 	public:
 		static ChessMove CreateMove(ChessTile &moveFromTile, ChessTile &moveToTile)
@@ -55,6 +62,5 @@ namespace AutoChess {
 		void setMoveToTile(int moveToTileX, int moveToTileY) {
 			MoveToTile = ChessTile(moveToTileX, moveToTileY);
 		};
-
 	};
 }

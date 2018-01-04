@@ -34,7 +34,7 @@ namespace AutoChess {
 		inline std::list<ChessState> getBlackMoves(ChessState &);
 		inline std::list<ChessState> getWhiteMoves(ChessState &);
 
-		inline void getBlackPawnMoves(std::list<ChessState> &, ChessState &, int*);
+		inline void getBlackPawnMoves(std::list<ChessState> &, ChessState &, ChessTile &);
 		inline void getWhitePawnMoves(std::list<ChessState> &, ChessState &, int*);
 
 		inline bool isWhiteInCheck(ChessState &, int*);
@@ -49,8 +49,6 @@ namespace AutoChess {
 
 		inline ChessState createState(ChessState &state, ChessMove moveToMake);
 
-		
-
 		// Returns true if the current players in check.
 		bool isCurrPlayerInCheck(ChessState &, int* currKingLoc);
 
@@ -60,8 +58,5 @@ namespace AutoChess {
 
 		// Gets a pieces location
 		inline int* getPieceLoc(ChessState &, char);
-
-		// Checks if the emptyed move is on the board. 
-		inline bool inRange(int *);
 	};
 }
