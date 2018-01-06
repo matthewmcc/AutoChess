@@ -6,7 +6,7 @@ namespace AutoChess {
 	const int KNIGHT_MOVES[8][2] = { { 1, 2 },{ 1, -2 },{ 2, 1 },{ 2, -1 },{ -1, 2 },{ -1, -2 },{ -2, 1 },{ -2, -1 } };
 	const int STRAIGHT_MOVES[4][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 } };
 	const int DIAGONAL_MOVES[4][2] = { { 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
-	const int DIA_STRI_MOVES[8][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 },{ 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
+	const int DIAGONAL_STRAIGHT_MOVES[8][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 },{ 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
 	const int WHITE_PAWNS_ATTACK_MOVES[2][2] = { { -1, -1 },{ 1, -1 } };
 	const int BLACK_PAWNS_ATTACK_MOVES[2][2] = { { -1, 1 },{ 1, 1 } };
 	int WHITE_PAWNS_MOVES[2][2] = { { 0, -1 },{ 0, -2 } };
@@ -16,7 +16,7 @@ namespace AutoChess {
 	const int KNIGHT_ARRAY_LENGTH = 8;
 	const int STRAIGHT_ARRAY_LENGTH = 4;
 	const int DIAGONAL_ARRAY_LENGTH = 4;
-	const int DIA_STRI_ARRAY_LENGTH = 8;
+	const int DIAGONAL_STRAIGHT_ARRAY_LENGTH = 8;
 	const int PAWN_MOVES_ARRAY_LENGTH = 2;
 
 	const int BLACK_PAWN_START_ROW = 1;

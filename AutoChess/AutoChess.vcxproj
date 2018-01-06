@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -148,11 +148,16 @@
   <ItemGroup>
     <ClInclude Include="AlphaBetaSearch.h" />
     <ClInclude Include="AutoChess.h" />
+    <ClInclude Include="BishopMoves.h" />
     <ClInclude Include="constAutoChess.h" />
     <ClInclude Include="ChessMove.h" />
     <ClInclude Include="ChessRules.h" />
     <ClInclude Include="ChessState.h" />
+    <ClInclude Include="KingCheckStatus.h" />
+    <ClInclude Include="KingMoves.h" />
+    <ClInclude Include="KnightMoves.h" />
     <ClInclude Include="PawnMoves.h" />
+    <ClInclude Include="QueenMoves.h" />
     <ClInclude Include="RookMoves.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -160,10 +165,15 @@
   <ItemGroup>
     <ClCompile Include="AlphaBetaSearch.cpp" />
     <ClCompile Include="AutoBetaChess.cpp" />
+    <ClCompile Include="BishopMoves.cpp" />
     <ClCompile Include="ChessRules.cpp" />
     <ClCompile Include="ChessState.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="KingCheckStatus.cpp" />
+    <ClCompile Include="KingMoves.cpp" />
+    <ClCompile Include="KnightMoves.cpp" />
     <ClCompile Include="PawnMoves.cpp" />
+    <ClCompile Include="QueenMoves.cpp" />
     <ClCompile Include="RookMoves.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

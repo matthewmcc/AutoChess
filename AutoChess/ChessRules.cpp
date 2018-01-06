@@ -2,6 +2,10 @@
 #include "ChessRules.h"
 #include "ChessMove.h"
 #include "PawnMoves.h"
+#include "RookMoves.h"
+#include "BishopMoves.h"
+#include "KnightMoves.h"
+#include "QueenMoves.h"
 
 #include <algorithm>
 #include <list>
@@ -84,19 +88,23 @@ namespace AutoChess {
 						break;
 					}
 					case WHITE_ROOK: {
-						getRookMoves(moves, currState, pieceToMove);
+						RookMoves rookMoves = RookMoves(currentState, pieceToMove);
+						moves.merge(rookMoves.getWhiteRookMoves());
 						break;
 					}
 					case WHITE_KNIGHT: {
-						getKnightMoves(moves, currState, pieceToMove);
+						KnightMoves knightMoves = KnightMoves(currentState, pieceToMove);
+						moves.merge(knightMoves.getWhiteKnightMoves());
 						break;
 					}
 					case WHITE_BISHOP: {
-						getBishopMoves(moves, currState, pieceToMove);
+						BishopMoves bishopMoves = BishopMoves(currentState, pieceToMove);
+						moves.merge(bishopMoves.getWhiteBishopMoves());
 						break;
 					}
 					case WHITE_QUEEN: {
-						getQueenMoves(moves, currState, pieceToMove);
+						QueenMoves queenMoves = QueenMoves(currentState, pieceToMove);
+						moves.merge(queenMoves.getWhiteQueenMoves());
 						break;
 					}
 					case WHITE_KING: {
@@ -136,19 +144,23 @@ namespace AutoChess {
 						break;
 					}
 					case BLACK_ROOK: {
-						getRookMoves(moves, currState, pieceToMove);
+						RookMoves rookMoves = RookMoves(currentState, pieceToMove);
+						moves.merge(rookMoves.getBlackRookMoves());
 						break;
 					}
 					case BLACK_KNIGHT: {
-						getKnightMoves(moves, currState, pieceToMove);
+						KnightMoves knightMoves = KnightMoves(currentState, pieceToMove);
+						moves.merge(knightMoves.getBlackKnightMoves());
 						break;
 					}
 					case BLACK_BISHOP: {
-						getBishopMoves(moves, currState, pieceToMove);
+						BishopMoves bishopMoves = BishopMoves(currentState, pieceToMove);
+						moves.merge(bishopMoves.getBlackBishopMoves());
 						break;
 					}
 					case BLACK_QUEEN: {
-						getQueenMoves(moves, currState, pieceToMove);
+						QueenMoves queenMoves = QueenMoves(currentState, pieceToMove);
+						moves.merge(queenMoves.getBlackQueenMoves());
 						break;
 					}
 					case BLACK_KING: {
@@ -163,162 +175,6 @@ namespace AutoChess {
 		}
 
 		return moves;
-	}
-
-	/// Given the current state and the current rook to move. All possible states are calculated and returned.
-	inline void ChessRules::getRookMoves(std::list<ChessState> &moves, ChessState &currState, int *rookToMove)
-	{
-
-	}
-
-	/// Given the current state and the current kinght to move. All possible states are calculated and returned.
-	inline void ChessRules::getKnightMoves(std::list<ChessState> &moves, ChessState &currState, int *knightToMove)
-	{
-		int moveTo[2];
-
-		char movingPiece = currState.getBoardTile(knightToMove[0], knightToMove[1]);
-		char movingTo;
-
-		for (int i = 0; i < KNIGHT_ARRAY_LENGTH; i++) 
-		{
-			moveTo[0] = knightToMove[0] + KNIGHT_MOVES[i][0];
-			moveTo[1] = knightToMove[1] + KNIGHT_MOVES[i][1];
-
-			if (inRange(moveTo)) {
-				movingTo = currState.getBoardTile(moveTo[0], moveTo[1]);
-				// Checks if the square been moved to is free or if the pieces involved are different case.
-				if (movingTo == EMPTY_TILE ||
-					(isupper(movingTo) ^ isupper(movingPiece))) {
-					moves.push_back(createState(currState, knightToMove, moveTo));
-				}
-			}
-		}
-	}
-
-	/// Given the current state and the current bishop to move. All possible states are calculated and returned.
-	inline void ChessRules::getBishopMoves(std::list<ChessState> &moves, ChessState &currState, int *bishopToMove)
-	{
-		int moveTo[2];
-		int multipler;
-
-		char movingPiece = currState.getBoardTile(bishopToMove[0], bishopToMove[1]);
-		char movingTo;
-
-		/// Checks all possible straight moves
-		for (int i = 0; i < DIAGONAL_ARRAY_LENGTH; i++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = bishopToMove[0] + (DIAGONAL_MOVES[i][0] * multipler);
-			moveTo[1] = bishopToMove[1] + (DIAGONAL_MOVES[i][1] * multipler);
-
-			while (inRange(moveTo)) 
-			{
-				movingTo = currState.getBoardTile(moveTo[0], moveTo[1]);
-				// Checks if the square been moved to is free or if the pieces involved are different case.
-				if (movingTo == EMPTY_TILE) {
-					moves.push_back(createState(currState, bishopToMove, moveTo));
-				}
-				else if ((isupper(movingTo) ^ isupper(movingPiece))) {
-					moves.push_back(createState(currState, bishopToMove, moveTo));
-
-					break;
-				}
-				else
-					break;
-
-				multipler++;
-
-				moveTo[0] = bishopToMove[0] + (DIAGONAL_MOVES[i][0] * multipler);
-				moveTo[1] = bishopToMove[1] + (DIAGONAL_MOVES[i][1] * multipler);
-			}
-		}
-	}
-
-	/// Returns all the possible moves for a Queen
-	inline void ChessRules::getQueenMoves(std::list<ChessState> &moves, ChessState &currState, int *queenToMove)
-	{
-		int moveTo[2];
-		int multipler;
-
-		char movingPiece = currState.getBoardTile(queenToMove[0], queenToMove[1]);
-		char movingTo;
-
-		/// Checks all possible stright and diagonal moves
-		for (int i = 0; i < DIA_STRI_ARRAY_LENGTH; i++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = queenToMove[0] + (DIA_STRI_MOVES[i][0] * multipler);
-			moveTo[1] = queenToMove[1] + (DIA_STRI_MOVES[i][1] * multipler);
-
-			while (inRange(moveTo)) 
-			{
-				movingTo = currState.getBoardTile(moveTo[0], moveTo[1]);
-				// Checks if the square been moved to is free or if the pieces involved are different case.
-				if (movingTo == EMPTY_TILE) {
-					moves.push_back(createState(currState, queenToMove, moveTo));
-				}
-				// Checks if the pieces are not the same color
-				else if ((isupper(movingTo) ^ isupper(movingPiece))) {
-					moves.push_back(createState(currState, queenToMove, moveTo));
-
-					break;
-				}
-				else
-					break;
-
-				multipler++;
-
-				moveTo[0] = queenToMove[0] + (DIA_STRI_MOVES[i][0] * multipler);
-				moveTo[1] = queenToMove[1] + (DIA_STRI_MOVES[i][1] * multipler);
-			}
-		}
-	}
-
-	/// Finds all the possible moves a king can make that are not illegal
-	inline void ChessRules::getKingMoves(std::list<ChessState> &moves, ChessState &currState, int *kingToMove)
-	{
-		// Holds the board location that are been checked for oppenent moves to.
-		int moveToCheck[2];
-
-		bool next;
-
-		/// Checks all 8 possible moves around the king to make sure hes not moving into check.
-		for (int i = 0; i < DIA_STRI_ARRAY_LENGTH; i++) 
-		{
-			moveToCheck[0] = kingToMove[0] + (DIA_STRI_MOVES[i][0]);
-			moveToCheck[1] = kingToMove[1] + (DIA_STRI_MOVES[i][1]);
-
-			if (inRange(moveToCheck)) {
-				next = false;
-
-				/// Black moves
-				if (currState.getWhichPlayersTurn() == BLACK_PLAYER) {
-					// Stop checking this square if the piece occuping it is the same color.
-					// And not the king itself.
-					if ((currState.getBoardTile(moveToCheck[0], moveToCheck[1]) < 96) &&
-						currState.getBoardTile(moveToCheck[0], moveToCheck[1]) != BLACK_KING)
-						continue;
-
-					if (isBlackInCheck(currState, moveToCheck))
-						continue;
-				}
-				/// White moves
-				else {
-					// Stop checking this square if the piece occuping it is the same color. 
-					// And not the king itself.
-					if (currState.getBoardTile(moveToCheck[0], moveToCheck[1]) > 91)
-						continue;
-
-					if (isWhiteInCheck(currState, moveToCheck))
-						continue;
-				}
-
-				// Creates and adds the move to the new move array.
-				moves.push_back(createState(currState, kingToMove, moveToCheck));
-			}
-		}
 	}
 
 	// Checks if the white king is in a state of Check
@@ -469,8 +325,6 @@ namespace AutoChess {
 
 	inline int calculateNewHeuristic(ChessState &state, ChessMove moveToBeMade) {
 		char takenPiece = state.getBoardTile(moveToBeMade.getMoveToTile());
-
-		
 	}
 
 

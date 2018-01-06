@@ -1,29 +1,28 @@
 #pragma once
 
-#include "stdafx.h"
 #include "ChessState.h"
 #include <list>
 
 namespace AutoChess {
-	class RookMoves
+	class KnightMoves
 	{
 	public:
-		RookMoves(ChessState &currentState, ChessTile &rookToMove) {
+		KnightMoves(ChessState &currentState, ChessTile &rookToMove) {
 			PossibleMoves = std::list<ChessState>();
 
 			CurrentState = currentState;
-			RookToMove = rookToMove;
+			KnightToMove = rookToMove;
 		};
 
-		std::list<ChessState> getBlackRookMoves();
-		std::list<ChessState> getWhiteRookMoves();
+		inline std::list<ChessState> getBlackKnightMoves();
+		inline std::list<ChessState> getWhiteKnightMoves();
 
 	private:
 		std::list<ChessState> PossibleMoves;
 		ChessState CurrentState;
-		ChessTile RookToMove;
+		ChessTile KnightToMove;
 
-		ChessMove addBlackDirectionMoves(int moveArrayIndex);
+		ChessMove addBlackDirectionMove(int moveArrayIndex);
 		bool isLegalBlackMove(ChessTile moveToTest);
 
 		ChessMove addWhiteDirectionMoves(int moveArrayIndex);

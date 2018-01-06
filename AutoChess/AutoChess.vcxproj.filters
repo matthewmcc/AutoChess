@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\PieceMoves">
+      <UniqueIdentifier>{4e57d18d-4a1b-4936-b9dd-959255ac4c80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PieceMoves">
+      <UniqueIdentifier>{432b4efb-f9e5-48be-bdbb-5cd5273b6c7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -39,10 +45,25 @@
     <ClInclude Include="constAutoChess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PawnMoves.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RookMoves.h">
+      <Filter>Header Files\PieceMoves</Filter>
+    </ClInclude>
+    <ClInclude Include="PawnMoves.h">
+      <Filter>Header Files\PieceMoves</Filter>
+    </ClInclude>
+    <ClInclude Include="BishopMoves.h">
+      <Filter>Header Files\PieceMoves</Filter>
+    </ClInclude>
+    <ClInclude Include="KingMoves.h">
+      <Filter>Header Files\PieceMoves</Filter>
+    </ClInclude>
+    <ClInclude Include="KnightMoves.h">
+      <Filter>Header Files\PieceMoves</Filter>
+    </ClInclude>
+    <ClInclude Include="QueenMoves.h">
+      <Filter>Header Files\PieceMoves</Filter>
+    </ClInclude>
+    <ClInclude Include="KingCheckStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -66,9 +87,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PawnMoves.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\PieceMoves</Filter>
     </ClCompile>
     <ClCompile Include="RookMoves.cpp">
+      <Filter>Source Files\PieceMoves</Filter>
+    </ClCompile>
+    <ClCompile Include="BishopMoves.cpp">
+      <Filter>Source Files\PieceMoves</Filter>
+    </ClCompile>
+    <ClCompile Include="KingMoves.cpp">
+      <Filter>Source Files\PieceMoves</Filter>
+    </ClCompile>
+    <ClCompile Include="KnightMoves.cpp">
+      <Filter>Source Files\PieceMoves</Filter>
+    </ClCompile>
+    <ClCompile Include="QueenMoves.cpp">
+      <Filter>Source Files\PieceMoves</Filter>
+    </ClCompile>
+    <ClCompile Include="KingCheckStatus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

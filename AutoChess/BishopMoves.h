@@ -5,23 +5,23 @@
 #include <list>
 
 namespace AutoChess {
-	class RookMoves
+	class BishopMoves
 	{
 	public:
-		RookMoves(ChessState &currentState, ChessTile &rookToMove) {
+		BishopMoves(ChessState &currentState, ChessTile &bishopToMove) {
 			PossibleMoves = std::list<ChessState>();
 
 			CurrentState = currentState;
-			RookToMove = rookToMove;
+			BishopToMove = bishopToMove;
 		};
 
-		std::list<ChessState> getBlackRookMoves();
-		std::list<ChessState> getWhiteRookMoves();
+		std::list<ChessState> getBlackBishopMoves();
+		std::list<ChessState> getWhiteBishopMoves();
 
 	private:
 		std::list<ChessState> PossibleMoves;
 		ChessState CurrentState;
-		ChessTile RookToMove;
+		ChessTile BishopToMove;
 
 		ChessMove addBlackDirectionMoves(int moveArrayIndex);
 		bool isLegalBlackMove(ChessTile moveToTest);

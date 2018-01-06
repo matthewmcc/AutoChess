@@ -30,11 +30,16 @@ namespace AutoChess {
 		inline void blackOffensiveMoves();
 		inline void blackAddLegalMove(ChessTile&);
 
+		inline ChessTile createNextBlackMoveTile(int);
 
 		inline void whiteStraightMoves();
 		inline void whiteTwoTileStraightMove();
 
 		inline void whiteOffensiveMoves();
 		inline void whiteAddLegalMove(ChessTile&);
+
+		inline ChessTile createNextWhiteMoveTile(int);
+
+		inline void addPossibleMove(ChessTile&);
 	};
 }

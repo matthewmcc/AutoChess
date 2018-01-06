@@ -41,10 +41,6 @@ namespace AutoChess {
 		inline bool isBlackInCheck(ChessState &, int*);
 
 		// Get all possible moves for a piece of a certain type
-		inline void getRookMoves(std::list<ChessState> &, ChessState &, int*);
-		inline void getKnightMoves(std::list<ChessState> &, ChessState &, int*);
-		inline void getBishopMoves(std::list<ChessState> &, ChessState &, int*);
-		inline void getQueenMoves(std::list<ChessState> &, ChessState &, int*);
 		inline void getKingMoves(std::list<ChessState> &, ChessState &, int*);
 
 		inline ChessState createState(ChessState &state, ChessMove moveToMake);

@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "RookMoves.h"
+#include "BishopMoves.h"
 
 namespace AutoChess {
-	std::list<ChessState> RookMoves::getBlackRookMoves() {
+	std::list<ChessState> BishopMoves::getBlackBishopMoves() {
 		/// Checks all possible straight moves
-		for (int moveArrayIndex = 0; moveArrayIndex < DIAGONAL_STRAIGHT_ARRAY_LENGTH; moveArrayIndex++)
+		for (int moveArrayIndex = 0; moveArrayIndex < DIAGONAL_ARRAY_LENGTH; moveArrayIndex++)
 		{
 			addBlackDirectionMoves(moveArrayIndex);
 		}
@@ -12,9 +12,9 @@ namespace AutoChess {
 		return PossibleMoves;
 	}
 
-	std::list<ChessState> RookMoves::getWhiteRookMoves() {
+	std::list<ChessState> BishopMoves::getWhiteBishopMoves() {
 		/// Checks all possible straight moves
-		for (int moveArrayIndex = 0; moveArrayIndex < DIAGONAL_STRAIGHT_ARRAY_LENGTH; moveArrayIndex++)
+		for (int moveArrayIndex = 0; moveArrayIndex < DIAGONAL_ARRAY_LENGTH; moveArrayIndex++)
 		{
 			addWhiteDirectionMoves(moveArrayIndex);
 		}
@@ -22,28 +22,28 @@ namespace AutoChess {
 		return PossibleMoves;
 	}
 
-	ChessMove RookMoves::addBlackDirectionMoves(int moveArrayIndex) 
+	ChessMove BishopMoves::addBlackDirectionMoves(int moveArrayIndex)
 	{
 		int moveLengthMultipler = 1;
 		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 
-		for (;moveToTile.isInBoardBounds(); moveLengthMultipler++)
+		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
 		{
 			if (isLegalBlackMove(moveToTile))
 				addPossibleMove(moveToTile);
-			else 
+			else
 				return;
 
 			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 		}
 	}
 
-	bool RookMoves::isLegalBlackMove(ChessTile moveToTest) {
+	bool BishopMoves::isLegalBlackMove(ChessTile moveToTest) {
 		return (CurrentState.isTileEmpty(moveToTest) ||
 			CurrentState.isTilesPieceWhite(moveToTest));
 	}
 
-	ChessMove RookMoves::addWhiteDirectionMoves(int moveArrayIndex)
+	ChessMove BishopMoves::addWhiteDirectionMoves(int moveArrayIndex)
 	{
 		int moveLengthMultipler = 1;
 		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
@@ -59,20 +59,20 @@ namespace AutoChess {
 		}
 	}
 
-	ChessTile RookMoves::createNextMoveTile(int moveArrayIndex, int moveLengthMultipler) {
-		ChessTile moveToTile = ChessTile(RookToMove.getX() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][0] * moveLengthMultipler),
-			RookToMove.getY() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
+	ChessTile BishopMoves::createNextMoveTile(int moveArrayIndex, int moveLengthMultipler) {
+		ChessTile moveToTile = ChessTile(BishopToMove.getX() + (STRAIGHT_MOVES[moveArrayIndex][0] * moveLengthMultipler),
+			BishopToMove.getY() + (STRAIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
 
 		return moveToTile;
 	}
 
-	bool RookMoves::isLegalWhiteMove(ChessTile moveToTest) {
+	bool BishopMoves::isLegalWhiteMove(ChessTile moveToTest) {
 		return (CurrentState.isTileEmpty(moveToTest) ||
 			CurrentState.isTilesPieceBlack(moveToTest));
 	}
 
-	void RookMoves::addPossibleMove(ChessTile &moveToAdd) {
-		ChessMove moveToMake = ChessMove::CreateMove(RookToMove, moveToAdd);
+	void BishopMoves::addPossibleMove(ChessTile &moveToAdd) {
+		ChessMove moveToMake = ChessMove::CreateMove(BishopToMove, moveToAdd);
 		PossibleMoves.push_back(CurrentState.CreateNextState(moveToMake));
 	}
 }

@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "RookMoves.h"
+#include "QueenMoves.h"
 
 namespace AutoChess {
-	std::list<ChessState> RookMoves::getBlackRookMoves() {
+	std::list<ChessState> QueenMoves::getBlackQueenMoves() {
 		/// Checks all possible straight moves
 		for (int moveArrayIndex = 0; moveArrayIndex < DIAGONAL_STRAIGHT_ARRAY_LENGTH; moveArrayIndex++)
 		{
@@ -12,7 +12,7 @@ namespace AutoChess {
 		return PossibleMoves;
 	}
 
-	std::list<ChessState> RookMoves::getWhiteRookMoves() {
+	std::list<ChessState> QueenMoves::getWhiteQueenMoves() {
 		/// Checks all possible straight moves
 		for (int moveArrayIndex = 0; moveArrayIndex < DIAGONAL_STRAIGHT_ARRAY_LENGTH; moveArrayIndex++)
 		{
@@ -22,28 +22,28 @@ namespace AutoChess {
 		return PossibleMoves;
 	}
 
-	ChessMove RookMoves::addBlackDirectionMoves(int moveArrayIndex) 
+	ChessMove QueenMoves::addBlackDirectionMoves(int moveArrayIndex)
 	{
 		int moveLengthMultipler = 1;
 		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 
-		for (;moveToTile.isInBoardBounds(); moveLengthMultipler++)
+		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
 		{
 			if (isLegalBlackMove(moveToTile))
 				addPossibleMove(moveToTile);
-			else 
+			else
 				return;
 
 			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 		}
 	}
 
-	bool RookMoves::isLegalBlackMove(ChessTile moveToTest) {
+	bool QueenMoves::isLegalBlackMove(ChessTile moveToTest) {
 		return (CurrentState.isTileEmpty(moveToTest) ||
 			CurrentState.isTilesPieceWhite(moveToTest));
 	}
 
-	ChessMove RookMoves::addWhiteDirectionMoves(int moveArrayIndex)
+	ChessMove QueenMoves::addWhiteDirectionMoves(int moveArrayIndex)
 	{
 		int moveLengthMultipler = 1;
 		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
@@ -59,20 +59,20 @@ namespace AutoChess {
 		}
 	}
 
-	ChessTile RookMoves::createNextMoveTile(int moveArrayIndex, int moveLengthMultipler) {
-		ChessTile moveToTile = ChessTile(RookToMove.getX() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][0] * moveLengthMultipler),
-			RookToMove.getY() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
+	ChessTile QueenMoves::createNextMoveTile(int moveArrayIndex, int moveLengthMultipler) {
+		ChessTile moveToTile = ChessTile(QueenToMove.getX() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][0] * moveLengthMultipler),
+			QueenToMove.getY() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
 
 		return moveToTile;
 	}
 
-	bool RookMoves::isLegalWhiteMove(ChessTile moveToTest) {
+	bool QueenMoves::isLegalWhiteMove(ChessTile moveToTest) {
 		return (CurrentState.isTileEmpty(moveToTest) ||
 			CurrentState.isTilesPieceBlack(moveToTest));
 	}
 
-	void RookMoves::addPossibleMove(ChessTile &moveToAdd) {
-		ChessMove moveToMake = ChessMove::CreateMove(RookToMove, moveToAdd);
+	void QueenMoves::addPossibleMove(ChessTile &moveToAdd) {
+		ChessMove moveToMake = ChessMove::CreateMove(QueenToMove, moveToAdd);
 		PossibleMoves.push_back(CurrentState.CreateNextState(moveToMake));
 	}
 }
