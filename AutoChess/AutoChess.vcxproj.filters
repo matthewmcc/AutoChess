@@ -19,6 +19,12 @@
     <Filter Include="Source Files\PieceMoves">
       <UniqueIdentifier>{432b4efb-f9e5-48be-bdbb-5cd5273b6c7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\KingCheckStatus">
+      <UniqueIdentifier>{944f9452-43c1-40da-a086-e28f906f2fa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\KingCheckStatus">
+      <UniqueIdentifier>{22086b8b-3870-47ae-893b-2f0cd859250f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -63,8 +69,11 @@
     <ClInclude Include="QueenMoves.h">
       <Filter>Header Files\PieceMoves</Filter>
     </ClInclude>
-    <ClInclude Include="KingCheckStatus.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BlackKingCheckStatus.h">
+      <Filter>Header Files\KingCheckStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="WhiteKingCheckStatus.h">
+      <Filter>Header Files\KingCheckStatus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +113,11 @@
     <ClCompile Include="QueenMoves.cpp">
       <Filter>Source Files\PieceMoves</Filter>
     </ClCompile>
-    <ClCompile Include="KingCheckStatus.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BlackKingCheckStatus.cpp">
+      <Filter>Source Files\KingCheckStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="WhiteKingCheckStatus.cpp">
+      <Filter>Source Files\KingCheckStatus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
