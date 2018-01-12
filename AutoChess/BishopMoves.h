@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "ChessState.h"
+
 #include <list>
 
 namespace AutoChess {
@@ -23,10 +24,10 @@ namespace AutoChess {
 		ChessState CurrentState;
 		ChessTile BishopToMove;
 
-		ChessMove addBlackDirectionMoves(int moveArrayIndex);
+		void addBlackDirectionMoves(int moveArrayIndex);
 		bool isLegalBlackMove(ChessTile moveToTest);
 
-		ChessMove addWhiteDirectionMoves(int moveArrayIndex);
+		void addWhiteDirectionMoves(int moveArrayIndex);
 		bool isLegalWhiteMove(ChessTile moveToTest);
 
 		ChessTile createNextMoveTile(int moveArrayIndex, int moveLengthMultipler);

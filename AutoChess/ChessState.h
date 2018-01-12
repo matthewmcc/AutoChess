@@ -23,8 +23,8 @@
 /// Current turn is either equal to 'W' or 'B'
 
 /// Black is represented by lower case (DEC ASCII 97 >=) and White by UPPERCASE (DEC ASCII 90 =<).
+#include "stdafx.h"
 #include "ChessMove.h"
-#include "constAutoChess.h"
 
 #pragma once
 namespace AutoChess {
@@ -45,16 +45,11 @@ namespace AutoChess {
 		/// Gets and sets for memeber variables
 		inline ChessMove getLastMove() { return LastMove; };
 
-		char getBoardTile(ChessTile tile) { return BoardState[tile.getX][tile.getY]; };
+		char getBoardTile(ChessTile tile) { return BoardState[tile.getX()][tile.getY()]; };
 		char getBoardTile(int x, int y) { return BoardState[x][y]; };
 
-		void setBoardTile(ChessTile tile, char newTileState) { BoardState[tile.getX][tile.getY] = newTileState; };
+		void setBoardTile(ChessTile tile, char newTileState) { BoardState[tile.getX()][tile.getY()] = newTileState; };
 		void setBoardTile(int x, int y, char newTileState) { BoardState[x][y] = newTileState; };
-
-		char getBoardTile(ChessTile tile) { BoardState[tile.getX][til e.getY]; };
-		void setBoardTile(ChessTile tile, char newTileState) {
-			BoardState[tile.getX][tile.getY] = newTileState;
-		};
 
 		inline char getWhichPlayersTurn() { return WhichPlayersTurn; };
 
@@ -73,6 +68,10 @@ namespace AutoChess {
 		inline bool isTilesPieceWhite(ChessTile tile) {
 			return BoardState[tile.getX()][tile.getY()] <= WHITES_HIGHEST_ASCII_VALUE;
 		};
+
+		inline ChessTile getBlackKingLocation();
+
+		inline ChessTile getWhiteKingLocation();
 
 	private:
 		char BoardState[8][8];
@@ -100,5 +99,9 @@ namespace AutoChess {
 		};
 
 		inline void setIsMaxPlayer(bool isMaxPlayer) { IsMaxPlayer = isMaxPlayer; };
+
+		inline ChessTile getPieceLocation(char pieceToFind);
 	};
+
+	class PieceNotFoundException : public std::exception {};
 }

@@ -2,14 +2,14 @@
 
 #pragma once
 namespace AutoChess {
-	struct ChessTile
+	class ChessTile
 	{
 	private:
 		int X;
 		int Y;
 
 	public:
-		ChessTile();
+		ChessTile() {};
 
 		ChessTile(int x, int y) {
 			setX(x);
@@ -34,6 +34,8 @@ namespace AutoChess {
 		ChessTile MoveToTile;
 
 	public:
+		ChessMove() {};
+
 		static ChessMove CreateMove(ChessTile &moveFromTile, ChessTile &moveToTile)
 		{
 			ChessMove chessMove = ChessMove();

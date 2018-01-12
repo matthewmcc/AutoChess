@@ -1,21 +1,24 @@
 
 #pragma once  
 
-#ifdef AUTO_CHESS_EXPORTS  
-#define AUTO_CHESS_API __declspec(dllexport)   
-#else  
-#define AUTO_CHESS_API __declspec(dllimport)   
-#endif 
-
 #include "stdafx.h"
+
 #include "ChessState.h"
-#include "constAutoChess.h"
+#include "ChessMove.h"
+#include "PawnMoves.h"
+#include "RookMoves.h"
+#include "BishopMoves.h"
+#include "KnightMoves.h"
+#include "QueenMoves.h"
+#include "KingMoves.h"
+#include "BlackKingCheckStatus.h"
+#include "WhiteKingCheckStatus.h"
 
 #include <list>
 #include <map>
 
 namespace AutoChess {
-	class AUTO_CHESS_API ChessRules
+	class ChessRules
 	{
 	public:
 		static ChessRules& getInstance();
@@ -34,25 +37,10 @@ namespace AutoChess {
 		inline std::list<ChessState> getBlackMoves(ChessState &);
 		inline std::list<ChessState> getWhiteMoves(ChessState &);
 
-		inline void getBlackPawnMoves(std::list<ChessState> &, ChessState &, ChessTile &);
-		inline void getWhitePawnMoves(std::list<ChessState> &, ChessState &, int*);
+		std::list<ChessState> removeBlackCheckStates(std::list<ChessState> &moves);
+		bool isBlackInCheck(ChessState &stateToTest);
 
-		inline bool isWhiteInCheck(ChessState &, int*);
-		inline bool isBlackInCheck(ChessState &, int*);
-
-		// Get all possible moves for a piece of a certain type
-		inline void getKingMoves(std::list<ChessState> &, ChessState &, int*);
-
-		inline ChessState createState(ChessState &state, ChessMove moveToMake);
-
-		// Returns true if the current players in check.
-		bool isCurrPlayerInCheck(ChessState &, int* currKingLoc);
-
-		// Removes any state from the list where the passed king is in a state of check.
-		// Only to be used when the king was in check the previous turn.
-		void removeCheckStates(std::list<ChessState> &moves, int* kingToCheck, char typeOfKing);
-
-		// Gets a pieces location
-		inline int* getPieceLoc(ChessState &, char);
+		std::list<ChessState> removeWhiteCheckStates(std::list<ChessState> &moves);
+		bool isWhiteInCheck(ChessState &stateToTest);
 	};
 }

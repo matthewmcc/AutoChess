@@ -37,10 +37,10 @@ namespace AutoChess {
 	}
 
 	void ChessState::makeMove(ChessMove move) {
-		char pieceToMove = getBoardTile(move.getMoveFromTile);
+		char pieceToMove = getBoardTile(move.getMoveFromTile());
 
-		setBoardTile(move.getMoveToTile, pieceToMove);
-		setBoardTile(move.getMoveFromTile, EMPTY_TILE);
+		setBoardTile(move.getMoveToTile(), pieceToMove);
+		setBoardTile(move.getMoveFromTile(), EMPTY_TILE);
 
 		LastMove = move;
 	}
@@ -62,5 +62,25 @@ namespace AutoChess {
 				BoardState[i][j] = tempBoardState[i][j];
 			}
 		}
+	}
+
+	ChessTile ChessState::getBlackKingLocation() {
+		return getPieceLocation(BLACK_KING);
+	}
+
+	ChessTile ChessState::getWhiteKingLocation() {
+		return getPieceLocation(WHITE_KING);
+	}
+
+	// Gets a pieces location. Throws a piece not found exception on failure
+	inline ChessTile ChessState::getPieceLocation(char pieceToFind) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (getBoardTile(i, j) == pieceToFind)
+					return ChessTile(i, j);
+			}
+		}
+
+		throw PieceNotFoundException();
 	}
 }

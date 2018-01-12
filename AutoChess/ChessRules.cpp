@@ -1,11 +1,5 @@
 #include "stdafx.h"
 #include "ChessRules.h"
-#include "ChessMove.h"
-#include "PawnMoves.h"
-#include "RookMoves.h"
-#include "BishopMoves.h"
-#include "KnightMoves.h"
-#include "QueenMoves.h"
 
 #include <algorithm>
 #include <list>
@@ -21,48 +15,27 @@ namespace AutoChess {
 		return instance;
 	}
 
-	std::list<ChessState> ChessRules::getMoves(ChessState &currState)
+	// If the game is in a terminal state the returned list will be empty
+	std::list<ChessState> ChessRules::getMoves(ChessState &currentState)
 	{
 		std::list<ChessState> moves;
 
-		bool kingInCheck;
-		int* currKingLoc;
-
-		if (currState.getWhichPlayersTurn() == BLACK_PLAYER) {
+		if (currentState.getWhichPlayersTurn() == BLACK_PLAYER) {
 			// If the king is a check state then after all the possible moves have been generated...
 			// ...any where the king is still in a check state must be removed.
-			currKingLoc = getPieceLoc(currState, BLACK_KING);
-			kingInCheck = isCurrPlayerInCheck(currState, currKingLoc);
-			moves = getBlackMoves(currState);
+			moves = getBlackMoves(currentState);
 
-			if (kingInCheck)
-				removeCheckStates(moves, currKingLoc, BLACK_PLAYER);
+			if (isBlackInCheck(currentState))
+				removeBlackCheckStates(moves);
 		}
 		else {
-			currKingLoc = getPieceLoc(currState, WHITE_KING);
-			kingInCheck = isCurrPlayerInCheck(currState, currKingLoc);
-			moves = getWhiteMoves(currState);
+			moves = getWhiteMoves(currentState);
 
-			if (kingInCheck)
-				removeCheckStates(moves, currKingLoc, 'W');
+			if (isWhiteInCheck(currentState))
+				removeWhiteCheckStates(moves);
 		}
 
 		return moves;
-	}
-
-	/// Is the king in check?
-	///		If not can another piece on that team move?
-	///	else
-	///		can the king move.
-	///			No? can a piece block the check?
-	///
-	bool ChessRules::isCurrPlayerInCheck(ChessState &currState, int* kingLoc)
-	{
-		/// Checks whos in check
-		if (currState.getWhichPlayersTurn() == BLACK_PLAYER)
-			return isBlackInCheck(currState, kingLoc);
-		else
-			return isWhiteInCheck(currState, kingLoc);
 	}
 
 	std::list<ChessState> ChessRules::getWhiteMoves(ChessState &currentState)
@@ -84,31 +57,32 @@ namespace AutoChess {
 					{
 					case WHITE_PAWN: {
 						PawnMoves pawnMoves = PawnMoves(currentState, pieceToMove);
-						moves.merge(pawnMoves.getWhitePawnMoves());
+						moves.splice(moves.begin(), pawnMoves.getWhitePawnMoves());
 						break;
 					}
 					case WHITE_ROOK: {
 						RookMoves rookMoves = RookMoves(currentState, pieceToMove);
-						moves.merge(rookMoves.getWhiteRookMoves());
+						moves.splice(moves.begin(), rookMoves.getWhiteRookMoves());
 						break;
 					}
 					case WHITE_KNIGHT: {
 						KnightMoves knightMoves = KnightMoves(currentState, pieceToMove);
-						moves.merge(knightMoves.getWhiteKnightMoves());
+						moves.splice(moves.begin(), knightMoves.getWhiteKnightMoves());
 						break;
 					}
 					case WHITE_BISHOP: {
 						BishopMoves bishopMoves = BishopMoves(currentState, pieceToMove);
-						moves.merge(bishopMoves.getWhiteBishopMoves());
+						moves.splice(moves.begin(), bishopMoves.getWhiteBishopMoves());
 						break;
 					}
 					case WHITE_QUEEN: {
 						QueenMoves queenMoves = QueenMoves(currentState, pieceToMove);
-						moves.merge(queenMoves.getWhiteQueenMoves());
+						moves.splice(moves.begin(), queenMoves.getWhiteQueenMoves());
 						break;
 					}
 					case WHITE_KING: {
-						getKingMoves(moves, currState, pieceToMove);
+						KingMoves kingMoves = KingMoves(currentState, pieceToMove);
+						moves.splice(moves.begin(), kingMoves.getWhiteKingMoves());
 						break;
 					}
 					default:
@@ -127,44 +101,45 @@ namespace AutoChess {
 		std::list<ChessState> moves = std::list<ChessState>();
 
 		// Checks every place on the board for black pieces and then
-		for (int i = 0; i < 8; i++) 
+		for (int i = 0; i < 8; i++)
 		{
-			for (int j = 0; j < 8; j++) 
+			for (int j = 0; j < 8; j++)
 			{
 				pieceType = currentState.getBoardTile(i, j);
 				if (pieceType >= 97) {
-					ChessTile pieceToMove = ChessTile(i, j);				
+					ChessTile pieceToMove = ChessTile(i, j);
 
 					// Calls the correct move funciton given the piece to move.
 					switch (pieceType)
 					{
 					case BLACK_PAWN: {
 						PawnMoves pawnMoves = PawnMoves(currentState, pieceToMove);
-						moves.merge(pawnMoves.getBlackPawnMoves());
+						moves.splice(moves.begin(), pawnMoves.getBlackPawnMoves());
 						break;
 					}
 					case BLACK_ROOK: {
 						RookMoves rookMoves = RookMoves(currentState, pieceToMove);
-						moves.merge(rookMoves.getBlackRookMoves());
+						moves.splice(moves.begin(), rookMoves.getBlackRookMoves());
 						break;
 					}
 					case BLACK_KNIGHT: {
 						KnightMoves knightMoves = KnightMoves(currentState, pieceToMove);
-						moves.merge(knightMoves.getBlackKnightMoves());
+						moves.splice(moves.begin(), knightMoves.getBlackKnightMoves());
 						break;
 					}
 					case BLACK_BISHOP: {
 						BishopMoves bishopMoves = BishopMoves(currentState, pieceToMove);
-						moves.merge(bishopMoves.getBlackBishopMoves());
+						moves.splice(moves.begin(), bishopMoves.getBlackBishopMoves());
 						break;
 					}
 					case BLACK_QUEEN: {
 						QueenMoves queenMoves = QueenMoves(currentState, pieceToMove);
-						moves.merge(queenMoves.getBlackQueenMoves());
+						moves.splice(moves.begin(), queenMoves.getBlackQueenMoves());
 						break;
 					}
 					case BLACK_KING: {
-						getKingMoves(moves, currState, pieceToMove);
+						KingMoves kingMoves = KingMoves(currentState, pieceToMove);
+						moves.splice(moves.begin(), kingMoves.getBlackKingMoves());
 						break;
 					}
 					default:
@@ -177,219 +152,47 @@ namespace AutoChess {
 		return moves;
 	}
 
-	// Checks if the white king is in a state of Check
-	inline bool ChessRules::isWhiteInCheck(ChessState &currState, int *kingToCheck) {
-		int moveTo[2];
-		int multipler;
+	// Removes any state from the list where the passed king is in a state of check.
+	// Only to be used when the king was in check the previous turn.
+	std::list<ChessState> ChessRules::removeBlackCheckStates(std::list<ChessState> &moves) {
+		std::list<ChessState>::iterator movesIterator = moves.begin();
 
-		char comparePiece;
-
-		/// Every possible move to these squares must be checked to make 
-		/// sure the king isn't moving into check.
-		// Pawn check.
-		if (currState.getBoardTile(kingToCheck[0] + PAWN_ATTACK_MOVES_BLACK[0][0],
-				kingToCheck[1] + PAWN_ATTACK_MOVES_BLACK[0][1]) == BLACK_PAWN ||
-			currState.getBoardTile(kingToCheck[0] + PAWN_ATTACK_MOVES_BLACK[1][0],
-				kingToCheck[1] + PAWN_ATTACK_MOVES_BLACK[1][1]) == BLACK_PAWN)
-			return true;
-
-		// Knight check
-		for (int j = 0; j < KNIGHT_ARRAY_LENGTH; j++) 
-		{
-			if (currState.getBoardTile(kingToCheck[0] + KNIGHT_MOVES[j][0],
-					kingToCheck[1] + KNIGHT_MOVES[j][1]) == BLACK_KNIGHT) {
-				return true;
-			}
+		while (movesIterator != moves.end()) {
+			if (isBlackInCheck(*movesIterator)) 
+				movesIterator = moves.erase(movesIterator);
+			else 
+				movesIterator++;
 		}
 
-		// King, Queen and Bishop check
-		for (int j = 0; j < DIAGONAL_ARRAY_LENGTH; j++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = kingToCheck[0] + (DIAGONAL_MOVES[j][0] * multipler);
-			moveTo[1] = kingToCheck[1] + (DIAGONAL_MOVES[j][1] * multipler);
-
-			while (inRange(moveTo)) 
-			{
-				comparePiece = currState.getBoardTile(moveTo[0], moveTo[1]);
-
-				if (comparePiece == BLACK_QUEEN || comparePiece == BLACK_BISHOP ||
-					(multipler == 1 && comparePiece == BLACK_KING)) {
-					return true;
-				}
-
-				multipler++;
-
-				moveTo[0] = kingToCheck[0] + (DIAGONAL_MOVES[j][0] * multipler);
-				moveTo[1] = kingToCheck[1] + (DIAGONAL_MOVES[j][1] * multipler);
-			}
-		}
-
-		// King, Queen and Rook check
-		for (int j = 0; j < STRAIGHT_ARRAY_LENGTH; j++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = kingToCheck[0] + (STRAIGHT_MOVES[j][0] * multipler);
-			moveTo[1] = kingToCheck[1] + (STRAIGHT_MOVES[j][1] * multipler);
-
-			while (inRange(moveTo)) {
-				comparePiece = currState.getBoardTile(moveTo[0], moveTo[1]);
-
-				if (comparePiece == BLACK_QUEEN || comparePiece == BLACK_ROOK ||
-					(multipler == 1 && comparePiece == BLACK_KING)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return moves;
 	}
 
-	// Checks if the black king is in a state of Check
-	inline bool ChessRules::isBlackInCheck(ChessState &currState, int *kingToCheck) {
-		int moveTo[2];
-		int multipler;
+	bool ChessRules::isBlackInCheck(ChessState &stateToTest) {
+		ChessTile kingToCheck = stateToTest.getBlackKingLocation();
+		BlackKingCheckStatus blackKingChecker = BlackKingCheckStatus(stateToTest, kingToCheck);
 
-		char comparePiece;
-
-		/// Every possible move to these squares must be checked to make 
-		/// sure the king isn't moving into check.
-		// Pawn check.
-		if (currState.getBoardTile(kingToCheck[0] + PAWN_ATTACK_MOVES_WHITE[0][0],
-				kingToCheck[1] + PAWN_ATTACK_MOVES_WHITE[0][1]) == WHITE_PAWN ||
-			currState.getBoardTile(kingToCheck[0] + PAWN_ATTACK_MOVES_WHITE[1][0],
-				kingToCheck[1] + PAWN_ATTACK_MOVES_WHITE[1][1]) == WHITE_PAWN)
-			return true;
-
-		// Knight check
-		for (int j = 0; j < KNIGHT_ARRAY_LENGTH; j++) {
-			if (currState.getBoardTile(kingToCheck[0] + KNIGHT_MOVES[j][0],
-					kingToCheck[1] + KNIGHT_MOVES[j][1]) == WHITE_KNIGHT) {
-				return true;
-			}
-		}
-
-		// King, Queen and Bishop check
-		for (int j = 0; j < DIAGONAL_ARRAY_LENGTH; j++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = kingToCheck[0] + (DIAGONAL_MOVES[j][0] * multipler);
-			moveTo[1] = kingToCheck[1] + (DIAGONAL_MOVES[j][1] * multipler);
-
-			while (inRange(moveTo)) {
-				comparePiece = currState.getBoardTile(moveTo[0], moveTo[1]);
-
-				if (comparePiece == WHITE_QUEEN || comparePiece == WHITE_BISHOP ||
-					(multipler == 1 && comparePiece == WHITE_KING)) {
-					return true;
-				}
-
-				multipler++;
-
-				moveTo[0] = kingToCheck[0] + (DIAGONAL_MOVES[j][0] * multipler);
-				moveTo[1] = kingToCheck[1] + (DIAGONAL_MOVES[j][1] * multipler);
-			}
-		}
-
-		// King, Queen and Rook check
-		for (int j = 0; j < STRAIGHT_ARRAY_LENGTH; j++) 
-		{
-			multipler = 1;
-
-			moveTo[0] = kingToCheck[0] + (STRAIGHT_MOVES[j][0] * multipler);
-			moveTo[1] = kingToCheck[1] + (STRAIGHT_MOVES[j][1] * multipler);
-
-			while (inRange(moveTo)) 
-			{
-				comparePiece = currState.getBoardTile(moveTo[0], moveTo[1]);
-
-				if (comparePiece == WHITE_QUEEN || comparePiece == WHITE_ROOK ||
-					(multipler == 1 && comparePiece == WHITE_KING)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return blackKingChecker.isBlackKingInCheck();
 	}
-
-	/// Creates a new state given a board state and a move to make then returns it.
-	inline ChessState ChessRules::createState(ChessState &state, ChessMove moveToMake) {
-		ChessState newState = state.CreateNextState(moveToMake);
-
-		return newState;
-	}
-
-	inline int calculateNewHeuristic(ChessState &state, ChessMove moveToBeMade) {
-		char takenPiece = state.getBoardTile(moveToBeMade.getMoveToTile());
-	}
-
 
 	// Removes any state from the list where the passed king is in a state of check.
 	// Only to be used when the king was in check the previous turn.
-	void ChessRules::removeCheckStates(std::list<ChessState> &moves, int* kingToCheck, char typeOfKing) {
-		std::list<ChessState>::iterator iterMoves = moves.begin();
+	std::list<ChessState> ChessRules::removeWhiteCheckStates(std::list<ChessState> &moves) {
+		std::list<ChessState>::iterator movesIterator = moves.begin();
 
-		int tempKingLoc[2];
-
-		if (typeOfKing == 'W') {
-			while (iterMoves != moves.end()) {
-				// If the king was moved last the temp King Loc must be used.
-				if ((*iterMoves).lastMove[0][0] == kingToCheck[0] &&
-					(*iterMoves).lastMove[0][1] == kingToCheck[1]) {
-					// Sets tempKingLoc to the new location of the king.
-					tempKingLoc[0] = (*iterMoves).lastMove[1][0];
-					tempKingLoc[1] = (*iterMoves).lastMove[1][1];
-
-					if (isBlackInCheck((*iterMoves), tempKingLoc))
-						iterMoves = moves.erase(iterMoves);
-					else
-						iterMoves++;
-				}
-				else {
-					if (isBlackInCheck((*iterMoves), kingToCheck))
-						iterMoves = moves.erase(iterMoves);
-					else
-						iterMoves++;
-				}
-			}
+		while (movesIterator != moves.end()) {
+			if (isWhiteInCheck(*movesIterator))
+				movesIterator = moves.erase(movesIterator);
+			else
+				movesIterator++;
 		}
-		else {
-			while (iterMoves != moves.end()) {
-				// If the king was moved last the temp King Loc must be used.
-				if ((*iterMoves).lastMove[0][0] == kingToCheck[0] &&
-					(*iterMoves).lastMove[0][1] == kingToCheck[1]) {
-					// Sets tempKingLoc to the new location of the king.
-					tempKingLoc[0] = (*iterMoves).lastMove[1][0];
-					tempKingLoc[1] = (*iterMoves).lastMove[1][1];
 
-					if (isWhiteInCheck((*iterMoves), tempKingLoc))
-						iterMoves = moves.erase(iterMoves);
-					else
-						iterMoves++;
-				}
-				else {
-					if (isWhiteInCheck((*iterMoves), kingToCheck))
-						iterMoves = moves.erase(iterMoves);
-					else
-						iterMoves++;
-				}
-			}
-		}
+		return moves;
 	}
 
-	// Gets a pieces location.
-	inline int* ChessRules::getPieceLoc(ChessState &currState, char pieceToFind) {
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (currState.getBoardTile(i, j) == pieceToFind)
-					return new int[2]{ i, j };
-			}
-		}
+	bool ChessRules::isWhiteInCheck(ChessState &stateToTest) {
+		ChessTile kingToCheck = stateToTest.getWhiteKingLocation();
+		WhiteKingCheckStatus whiteKingChecker = WhiteKingCheckStatus(stateToTest, kingToCheck);
 
-		return nullptr;
+		return whiteKingChecker.isWhiteKingInCheck();
 	}
 }

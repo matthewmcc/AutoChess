@@ -22,7 +22,7 @@ namespace AutoChess {
 		return PossibleMoves;
 	}
 
-	ChessMove QueenMoves::addBlackDirectionMoves(int moveArrayIndex)
+	void QueenMoves::addBlackDirectionMoves(int moveArrayIndex)
 	{
 		int moveLengthMultipler = 1;
 		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
@@ -43,7 +43,7 @@ namespace AutoChess {
 			CurrentState.isTilesPieceWhite(moveToTest));
 	}
 
-	ChessMove QueenMoves::addWhiteDirectionMoves(int moveArrayIndex)
+	void QueenMoves::addWhiteDirectionMoves(int moveArrayIndex)
 	{
 		int moveLengthMultipler = 1;
 		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
@@ -73,6 +73,6 @@ namespace AutoChess {
 
 	void QueenMoves::addPossibleMove(ChessTile &moveToAdd) {
 		ChessMove moveToMake = ChessMove::CreateMove(QueenToMove, moveToAdd);
-		PossibleMoves.push_back(CurrentState.CreateNextState(moveToMake));
+		PossibleMoves.push_front(CurrentState.CreateNextState(moveToMake));
 	}
 }

@@ -23,15 +23,17 @@ namespace AutoChess {
 		ChessState CurrentState;
 		ChessTile KingToMove;
 
-		ChessMove addBlackDirectionMove(int moveArrayIndex);
+		void addBlackDirectionMove(int moveArrayIndex);
 		bool isLegalBlackKingMove(ChessTile moveToTest);
 		bool isLegalBlackMove(ChessTile moveToTest);
+		bool blackKingNotInCheck(ChessTile moveToTest);
 
-		ChessMove addWhiteDirectionMove(int moveArrayIndex);
+		void addWhiteDirectionMove(int moveArrayIndex);
 		bool isLegalWhiteKingMove(ChessTile moveToTest);
 		bool isLegalWhiteMove(ChessTile moveToTest);
+		bool whiteKingNotInCheck(ChessTile moveToTest);
 
-		ChessTile createNextMoveTile(int moveArrayIndex, int moveLengthMultipler);
+		ChessTile createNextMoveTile(int moveArrayIndex);
 		void addPossibleMove(ChessTile &moveToAdd);
 	};
 }

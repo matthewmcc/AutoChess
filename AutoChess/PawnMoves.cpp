@@ -121,6 +121,6 @@ namespace AutoChess {
 
 	void PawnMoves::addPossibleMove(ChessTile &moveToAdd) {
 		ChessMove moveToMake = ChessMove::CreateMove(PawnToMove, moveToAdd);
-		PossibleMoves.push_back(CurrentState.CreateNextState(moveToMake));
+		PossibleMoves.push_front(CurrentState.CreateNextState(moveToMake));
 	}
 }

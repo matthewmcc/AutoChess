@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdafx.h"
 #include "ChessState.h"
 #include <list>
 
@@ -22,10 +23,10 @@ namespace AutoChess {
 		ChessState CurrentState;
 		ChessTile KnightToMove;
 
-		ChessMove addBlackDirectionMove(int moveArrayIndex);
+		void addBlackDirectionMoves(int moveArrayIndex);
 		bool isLegalBlackMove(ChessTile moveToTest);
 
-		ChessMove addWhiteDirectionMoves(int moveArrayIndex);
+		void addWhiteDirectionMoves(int moveArrayIndex);
 		bool isLegalWhiteMove(ChessTile moveToTest);
 
 		ChessTile createNextMoveTile(int moveArrayIndex, int moveLengthMultipler);
