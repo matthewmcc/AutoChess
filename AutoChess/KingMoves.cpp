@@ -28,8 +28,9 @@ namespace AutoChess {
 	}
 
 	bool KingMoves::isLegalBlackMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceWhite(moveToTest));
+		return (moveToTest.isInBoardBounds() &&
+			(CurrentState.isTileEmpty(moveToTest) ||
+			CurrentState.isTilesPieceWhite(moveToTest)));
 	}
 
 	bool KingMoves::blackKingNotInCheck(ChessTile moveToTest) {
@@ -65,8 +66,9 @@ namespace AutoChess {
 	}
 
 	bool KingMoves::isLegalWhiteMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceWhite(moveToTest));
+		return (moveToTest.isInBoardBounds() &&
+			(CurrentState.isTileEmpty(moveToTest) ||
+			CurrentState.isTilesPieceBlack(moveToTest)));
 	}
 
 	bool KingMoves::whiteKingNotInCheck(ChessTile moveToTest) {

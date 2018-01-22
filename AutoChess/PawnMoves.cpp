@@ -3,124 +3,191 @@
 
 namespace AutoChess {
 	// Given the current state and the current black pawn to move. All possible states are calculated and returned.
-	inline std::list<ChessState> PawnMoves::getBlackPawnMoves()
+	std::list<ChessState> PawnMoves::getBlackPawnMoves()
 	{
-		blackStraightMoves();
+		blackStraightMove();
 		blackOffensiveMoves();
 
 		return PossibleMoves;
 	}
 
 	// Given the current state and the current white pawn to move. All possible states are calculated and returned.
-	inline std::list<ChessState> PawnMoves::getWhitePawnMoves()
+	std::list<ChessState> PawnMoves::getWhitePawnMoves()
 	{
-		whiteStraightMoves();
+		whiteStraightMove();
 		whiteOffensiveMoves();
 
 		return PossibleMoves;
 	}
 
-	void PawnMoves::blackStraightMoves() {
+	void PawnMoves::blackStraightMove() {
 		// Checks first possible pawn move
-		ChessTile moveToTile = ChessTile(PawnToMove.getX(), PawnToMove.getY() + 1);
-		if (CurrentState.isTileEmpty(moveToTile))
-		{
-			addPossibleMove(moveToTile);
+		ChessTile moveToTile = createBlackMoveTile(0);
 
-			// Checks if the pawn is in the first position.
-			if (PawnToMove.getY() == BLACK_PAWN_START_ROW) {
-				blackTwoTileStraightMove();
-			}
+		if (blackAddLegalMove(moveToTile)) 
+		{
+			if (PawnToMove.getX() == BLACK_PAWN_START_ROW)
+				doubleBlackStraightMove();
 		}
 	}
 
-	void PawnMoves::blackTwoTileStraightMove() {
-		ChessTile moveToTile = ChessTile(PawnToMove.getX(), PawnToMove.getY() + 2);
-		if (CurrentState.isTileEmpty(moveToTile))
-		{
-			addPossibleMove(moveToTile);
-		}
+	void PawnMoves::doubleBlackStraightMove() {
+		ChessTile moveToTile = createBlackMoveTile(1);
+
+		blackAddLegalMove(moveToTile);
 	}
 
 	void PawnMoves::blackOffensiveMoves() {
 		// Checks if either of the pawn offensive moves are viable.
 		for (int i = 0; i < PAWN_MOVES_ARRAY_LENGTH; i++)
 		{
-			ChessTile moveToTile = createNextBlackMoveTile(i);
+			ChessTile moveToTile = createBlackOffensiveMoveTile(i);
 
-			blackAddLegalMove(moveToTile);
+			blackAddLegalOffensiveMove(moveToTile);
 		}
 	}
 
-	void PawnMoves::blackAddLegalMove(ChessTile &moveToTile) {
-		if (moveToTile.isInBoardBounds()) 
+	// Returns true if the move was added else false
+	bool PawnMoves::blackAddLegalMove(ChessTile &moveToTile) {
+		if (moveToTile.isInBoardBounds())
 		{
-			if (CurrentState.isTilesPieceWhite(moveToTile)) 
+			if (CurrentState.isTileEmpty(moveToTile))
 			{
-				addPossibleMove(moveToTile);
+				addBlackPossibleMove(moveToTile);
+				return true;
+			}
+		}
+
+		return false;
+	};
+
+
+	void PawnMoves::blackAddLegalOffensiveMove(ChessTile &moveToTile) {
+		if (moveToTile.isInBoardBounds())
+		{
+			if (CurrentState.isTilesPieceWhite(moveToTile))
+			{
+				addBlackPossibleMove(moveToTile);
 			}
 		}
 	};
 
-	ChessTile PawnMoves::createNextBlackMoveTile(int moveArrayIndex) {
+	void PawnMoves::addBlackPossibleMove(ChessTile &moveToAdd) {
+		ChessMove moveToMake = ChessMove::CreateMove(PawnToMove, moveToAdd);
+		ChessState newState = CurrentState.CreateNextState(moveToMake);
+
+		PossibleMoves.push_front(isBlackPawnUpgrade(newState));
+	}
+
+	ChessState PawnMoves::isBlackPawnUpgrade(ChessState stateToCheck) {
+		if (stateToCheck.getLastMove().getMoveToTileX() == BLACK_PAWN_END_ROW) {
+			stateToCheck.setBoardTile(stateToCheck.getLastMove().getMoveToTile(), BLACK_QUEEN);
+
+			if (stateToCheck.isMaxPlayer())
+				stateToCheck.setHeuristsValue(stateToCheck.getHeuristsValue() - PAWN_UPGRADE);
+			else
+				stateToCheck.setHeuristsValue(stateToCheck.getHeuristsValue() - PAWN_UPGRADE);
+		}
+
+		return stateToCheck;
+	}
+
+	ChessTile PawnMoves::createBlackMoveTile(int moveArrayIndex) {
+		int tileXValue = PawnToMove.getX() + (BLACK_PAWNS_MOVES[moveArrayIndex][0]);
+		int tileYValue = PawnToMove.getY() + (BLACK_PAWNS_MOVES[moveArrayIndex][1]);
+
+		return ChessTile(tileXValue, tileYValue);
+	}
+
+	ChessTile PawnMoves::createBlackOffensiveMoveTile(int moveArrayIndex) {
 		int tileXValue = PawnToMove.getX() + (BLACK_PAWNS_ATTACK_MOVES[moveArrayIndex][0]);
 		int tileYValue = PawnToMove.getY() + (BLACK_PAWNS_ATTACK_MOVES[moveArrayIndex][1]);
 
 		return ChessTile(tileXValue, tileYValue);
 	}
 
-
-	void PawnMoves::whiteStraightMoves() {
+	void PawnMoves::whiteStraightMove() {
 		// Checks first possible pawn move
-		ChessTile moveToTile = ChessTile(PawnToMove.getX(), PawnToMove.getY() - 1);
-		if (CurrentState.isTileEmpty(moveToTile))
-		{
-			addPossibleMove(moveToTile);
+		ChessTile moveToTile = createWhiteMoveTile(0);
 
-			// Checks if the pawn is in the first position.
-			if (PawnToMove.getY() == WHITE_PAWN_START_ROW) {
-				whiteTwoTileStraightMove();
-			}
+		if (whiteAddLegalMove(moveToTile))
+		{
+			if (PawnToMove.getX() == WHITE_PAWN_START_ROW)
+				doubleWhiteStraightMove();
 		}
 	}
 
-	void PawnMoves::whiteTwoTileStraightMove() {
-		ChessTile moveToTile = ChessTile(PawnToMove.getX(), PawnToMove.getY() - 2);
-		if (CurrentState.isTileEmpty(moveToTile))
-		{
-			addPossibleMove(moveToTile);
-		}
+	void PawnMoves::doubleWhiteStraightMove() {
+		ChessTile moveToTile = createWhiteMoveTile(1);
+
+		whiteAddLegalMove(moveToTile);
 	}
 
 	void PawnMoves::whiteOffensiveMoves() {
 		// Checks if either of the pawn offensive moves are viable.
 		for (int i = 0; i < PAWN_MOVES_ARRAY_LENGTH; i++)
 		{
-			ChessTile moveToTile = createNextWhiteMoveTile(i);
+			ChessTile moveToTile = createWhiteOffensiveMoveTile(i);
 
-			whiteAddLegalMove(moveToTile);
+			whiteAddLegalOffensiveMove(moveToTile);
 		}
 	}
 
-	void PawnMoves::whiteAddLegalMove(ChessTile &moveToTile) {
+	// Returns true if the move was added else false
+	bool PawnMoves::whiteAddLegalMove(ChessTile &moveToTile) {
+		if (moveToTile.isInBoardBounds())
+		{
+			if (CurrentState.isTileEmpty(moveToTile))
+			{
+				addWhitePossibleMove(moveToTile);
+				return true;
+			}
+		}
+
+		return false;
+	};
+
+	void PawnMoves::whiteAddLegalOffensiveMove(ChessTile &moveToTile) {
 		if (moveToTile.isInBoardBounds()) 
 		{
-			if (CurrentState.isTilesPieceWhite(moveToTile)) 
+			if (CurrentState.isTilesPieceBlack(moveToTile)) 
 			{
-				addPossibleMove(moveToTile);
+				addWhitePossibleMove(moveToTile);
 			}
 		}
 	};
 
-	ChessTile PawnMoves::createNextWhiteMoveTile(int moveArrayIndex) {
+	ChessTile PawnMoves::createWhiteMoveTile(int moveArrayIndex) {
+		int tileXValue = PawnToMove.getX() + (WHITE_PAWNS_MOVES[moveArrayIndex][0]);
+		int tileYValue = PawnToMove.getY() + (WHITE_PAWNS_MOVES[moveArrayIndex][1]);
+
+		return ChessTile(tileXValue, tileYValue);
+	}
+
+	ChessTile PawnMoves::createWhiteOffensiveMoveTile(int moveArrayIndex) {
 		int tileXValue = PawnToMove.getX() + (WHITE_PAWNS_ATTACK_MOVES[moveArrayIndex][0]);
 		int tileYValue = PawnToMove.getY() + (WHITE_PAWNS_ATTACK_MOVES[moveArrayIndex][1]);
 
 		return ChessTile(tileXValue, tileYValue);
 	}
 
-	void PawnMoves::addPossibleMove(ChessTile &moveToAdd) {
+	void PawnMoves::addWhitePossibleMove(ChessTile &moveToAdd) {
 		ChessMove moveToMake = ChessMove::CreateMove(PawnToMove, moveToAdd);
-		PossibleMoves.push_front(CurrentState.CreateNextState(moveToMake));
+		ChessState newState = CurrentState.CreateNextState(moveToMake);
+
+		PossibleMoves.push_front(isWhitePawnUpgrade(newState));
+	}
+
+	ChessState PawnMoves::isWhitePawnUpgrade(ChessState stateToCheck) {
+		if (stateToCheck.getLastMove().getMoveToTileX() == WHITE_PAWN_END_ROW) {
+			stateToCheck.setBoardTile(stateToCheck.getLastMove().getMoveToTile(), WHITE_QUEEN);
+			
+			if (stateToCheck.isMaxPlayer())
+				stateToCheck.setHeuristsValue(stateToCheck.getHeuristsValue() - PAWN_UPGRADE);
+			else 
+				stateToCheck.setHeuristsValue(stateToCheck.getHeuristsValue() - PAWN_UPGRADE);
+		}
+
+		return stateToCheck;
 	}
 }

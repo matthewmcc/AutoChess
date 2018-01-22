@@ -7,10 +7,10 @@ namespace AutoChess {
 	const int STRAIGHT_MOVES[4][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 } };
 	const int DIAGONAL_MOVES[4][2] = { { 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
 	const int DIAGONAL_STRAIGHT_MOVES[8][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 },{ 1, 1 },{ 1, -1 },{ -1, 1 },{ -1, -1 } };
-	const int WHITE_PAWNS_ATTACK_MOVES[2][2] = { { -1, -1 },{ 1, -1 } };
-	const int BLACK_PAWNS_ATTACK_MOVES[2][2] = { { -1, 1 },{ 1, 1 } };
-	int WHITE_PAWNS_MOVES[2][2] = { { 0, -1 },{ 0, -2 } };
-	int BLACK_PAWNS_MOVES[2][2] = { { 0, 1 },{ 0, 2 } };
+	const int WHITE_PAWNS_ATTACK_MOVES[2][2] = { { -1, -1 },{ -1, 1 } };
+	const int BLACK_PAWNS_ATTACK_MOVES[2][2] = { { 1, -1 },{ 1, 1 } };
+	const int WHITE_PAWNS_MOVES[2][2] = { { -1, 0 },{ -2, 0 } };
+	const int BLACK_PAWNS_MOVES[2][2] = { { 1, 0 },{ 2, 0 } };
 
 	/// Lengths of all the arrays above.
 	const int KNIGHT_ARRAY_LENGTH = 8;
@@ -20,10 +20,12 @@ namespace AutoChess {
 	const int PAWN_MOVES_ARRAY_LENGTH = 2;
 
 	const int BLACK_PAWN_START_ROW = 1;
+	const int BLACK_PAWN_END_ROW = 7;
 	const int WHITE_PAWN_START_ROW = 6;
+	const int WHITE_PAWN_END_ROW = 0;
 
-	const int BLACKS_LOWEST_ASCII_VALUE = 90;
-	const int WHITES_HIGHEST_ASCII_VALUE = 97;
+	const int BLACKS_LOWEST_ASCII_VALUE = 97;
+	const int WHITES_HIGHEST_ASCII_VALUE = 90;
 
 	// Player declarers
 	const char WHITE_PLAYER = 'W';
@@ -47,7 +49,13 @@ namespace AutoChess {
 	const char EMPTY_TILE = '_';
 
 	// Heuristic values of all the pieces
-	std::map<char, int> PIECE_VALUES = { { EMPTY_TILE, 0 },
+	const std::map<char, int> PIECE_VALUES = { { EMPTY_TILE, 0 },
 	{ BLACK_PAWN, 1 },{ WHITE_PAWN, 1 },
-	{ BLACK_KNIGHT, 3 },{ WHITE_KNIGHT, 3 },{ 'b', 3 },{ 'r', 5 },{ 'q', 9 },{ 'k', 100 } };
+	{ BLACK_KNIGHT, 3 },{ WHITE_KNIGHT, 3 },
+	{ BLACK_BISHOP, 3 },{ WHITE_BISHOP, 3 },
+	{ BLACK_ROOK, 5 },{ WHITE_ROOK, 5 },
+	{ BLACK_QUEEN, 9 },{ WHITE_QUEEN, 9 },
+	{ BLACK_KING, 100 },{ WHITE_KING, 100 }, };
+
+	const int PAWN_UPGRADE = BLACK_QUEEN - BLACK_PAWN;
 }

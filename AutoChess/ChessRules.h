@@ -21,17 +21,17 @@ namespace AutoChess {
 	class ChessRules
 	{
 	public:
+		// Singleton functions
+		//ChessRules(ChessRules const &) = delete;
+		//void operator=(ChessRules const&) = delete;
+
 		static ChessRules& getInstance();
 
 		// If this returns zero moves if the game is in an terminal state.
 		std::list<ChessState> getMoves(ChessState &);
 
 	private:
-		// Singleton functions
-		ChessRules();
-		~ChessRules();
-		ChessRules(const ChessRules &);
-		const ChessRules & operator = (const ChessRules &);
+		ChessRules() {};
 
 		/// These functions are divided by piece color for effiency.
 		inline std::list<ChessState> getBlackMoves(ChessState &);

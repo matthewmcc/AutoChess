@@ -24,14 +24,18 @@ namespace AutoChess {
 	}
 
 	bool WhiteKingCheckStatus::tileNotBlackPawn(ChessTile tileToCheck) {
-		return CurrentState.getBoardTile(tileToCheck) != BLACK_PAWN;
+		if (tileToCheck.isInBoardBounds()) 
+		{
+			return CurrentState.getBoardTile(tileToCheck) == BLACK_PAWN;
+		}
+		return true;
 	}
 
 	bool WhiteKingCheckStatus::isSafeFromKnights() {
 		for (int j = 0; j < KNIGHT_ARRAY_LENGTH; j++) {
 			ChessTile tileToCheck = getKnightAttackTile(j);
 			
-			if (tileNotBlackKnight(tileToCheck))
+			if (tileIsBlackKnight(tileToCheck))
 				return false;
 		}
 
@@ -43,8 +47,8 @@ namespace AutoChess {
 			KingToCheck.getY() + KNIGHT_MOVES[knightArrayIndex][1]);
 	}
 
-	bool WhiteKingCheckStatus::tileNotBlackKnight(ChessTile tileToCheck) {
-		return CurrentState.getBoardTile(tileToCheck) != BLACK_KNIGHT;
+	bool WhiteKingCheckStatus::tileIsBlackKnight(ChessTile tileToCheck) {
+		return CurrentState.getBoardTile(tileToCheck) == BLACK_KNIGHT;
 	}
 
 	bool WhiteKingCheckStatus::isSafeFromDiagonalMoves() {
@@ -63,13 +67,14 @@ namespace AutoChess {
 
 		while (tileToCheck.isInBoardBounds())
 		{
-			if (tileNotBlackDiagonalPiece(tileToCheck, moveLengthMultipler)) 
+			if (tileIsBlackDiagonalPiece(tileToCheck, moveLengthMultipler)) 
+				return true;
+			else 
 			{
 				if (haltBlackDiagonalSearch(tileToCheck, moveLengthMultipler))
 					return false;
 			}
-			else
-				return true;
+				
 
 			moveLengthMultipler++;
 			tileToCheck = getDiagonalAttackTile(diagonalArrayIndex, moveLengthMultipler);
@@ -83,11 +88,11 @@ namespace AutoChess {
 			KingToCheck.getY() + (DIAGONAL_MOVES[diagonalArrayIndex][1] * moveLengthMultipler));
 	}
 
-	bool WhiteKingCheckStatus::tileNotBlackDiagonalPiece(ChessTile tileToTest, int moveLengthMultipler) {
+	bool WhiteKingCheckStatus::tileIsBlackDiagonalPiece(ChessTile tileToTest, int moveLengthMultipler) {
 		char pieceToTest = CurrentState.getBoardTile(tileToTest);
 
-		return (pieceToTest != BLACK_QUEEN || pieceToTest != BLACK_BISHOP ||
-			(moveLengthMultipler == 1 && pieceToTest != BLACK_KING));
+		return (pieceToTest == BLACK_QUEEN || pieceToTest == BLACK_BISHOP ||
+			(moveLengthMultipler == 1 && pieceToTest == BLACK_KING));
 	}
 
 	bool WhiteKingCheckStatus::haltBlackDiagonalSearch(ChessTile tileToTest, int moveLengthMultipler) {
@@ -123,13 +128,13 @@ namespace AutoChess {
 
 		while (tileToCheck.isInBoardBounds())
 		{
-			if (tileNotBlackStraightPiece(tileToCheck, moveLengthMultipler))
+			if (tileIsBlackStraightPiece(tileToCheck, moveLengthMultipler))
+				return true;
+			else
 			{
 				if (haltBlackStraightSearch(tileToCheck, moveLengthMultipler))
 					return false;
 			}
-			else
-				return true;
 
 			moveLengthMultipler++;
 			tileToCheck = getStraightAttackTile(straightArrayIndex, moveLengthMultipler);
@@ -143,11 +148,11 @@ namespace AutoChess {
 			KingToCheck.getY() + (STRAIGHT_MOVES[straightArrayIndex][1] * moveLengthMultipler));
 	}
 
-	bool WhiteKingCheckStatus::tileNotBlackStraightPiece(ChessTile tileToTest, int moveLengthMultipler) {
+	bool WhiteKingCheckStatus::tileIsBlackStraightPiece(ChessTile tileToTest, int moveLengthMultipler) {
 		char pieceToTest = CurrentState.getBoardTile(tileToTest);
 
-		return (pieceToTest != BLACK_QUEEN || pieceToTest != BLACK_ROOK ||
-			(moveLengthMultipler == 1 && pieceToTest != BLACK_KING));
+		return (pieceToTest == BLACK_QUEEN || pieceToTest == BLACK_ROOK ||
+			(moveLengthMultipler == 1 && pieceToTest == BLACK_KING));
 	}
 
 	bool WhiteKingCheckStatus::haltBlackStraightSearch(ChessTile tileToTest, int moveLengthMultipler) {

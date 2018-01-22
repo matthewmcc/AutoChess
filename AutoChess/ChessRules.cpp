@@ -5,9 +5,6 @@
 #include <list>
 
 namespace AutoChess {
-	ChessRules::ChessRules() {}
-	ChessRules::~ChessRules() {}
-
 	// Function to insure class is only used as singleton.
 	ChessRules& ChessRules::getInstance()
 	{
@@ -41,7 +38,7 @@ namespace AutoChess {
 	std::list<ChessState> ChessRules::getWhiteMoves(ChessState &currentState)
 	{
 		char pieceType;
-		std::list<ChessState> moves = std::list<ChessState>();
+		std::list<ChessState> *moves = new std::list<ChessState>();
 
 		// Checks every place on the board for black pieces and then
 		for (int i = 0; i < 8; i++) 
@@ -57,32 +54,33 @@ namespace AutoChess {
 					{
 					case WHITE_PAWN: {
 						PawnMoves pawnMoves = PawnMoves(currentState, pieceToMove);
-						moves.splice(moves.begin(), pawnMoves.getWhitePawnMoves());
+						std::list<ChessState> m = pawnMoves.getWhitePawnMoves();
+						(*moves).insert((*moves).end(), m.begin(), m.end());
 						break;
 					}
 					case WHITE_ROOK: {
 						RookMoves rookMoves = RookMoves(currentState, pieceToMove);
-						moves.splice(moves.begin(), rookMoves.getWhiteRookMoves());
+						(*moves).splice((*moves).begin(), rookMoves.getWhiteRookMoves());
 						break;
 					}
 					case WHITE_KNIGHT: {
 						KnightMoves knightMoves = KnightMoves(currentState, pieceToMove);
-						moves.splice(moves.begin(), knightMoves.getWhiteKnightMoves());
+						(*moves).splice((*moves).begin(), knightMoves.getWhiteKnightMoves());
 						break;
 					}
 					case WHITE_BISHOP: {
 						BishopMoves bishopMoves = BishopMoves(currentState, pieceToMove);
-						moves.splice(moves.begin(), bishopMoves.getWhiteBishopMoves());
+						(*moves).splice((*moves).begin(), bishopMoves.getWhiteBishopMoves());
 						break;
 					}
 					case WHITE_QUEEN: {
 						QueenMoves queenMoves = QueenMoves(currentState, pieceToMove);
-						moves.splice(moves.begin(), queenMoves.getWhiteQueenMoves());
+						(*moves).splice((*moves).begin(), queenMoves.getWhiteQueenMoves());
 						break;
 					}
 					case WHITE_KING: {
 						KingMoves kingMoves = KingMoves(currentState, pieceToMove);
-						moves.splice(moves.begin(), kingMoves.getWhiteKingMoves());
+						(*moves).splice((*moves).begin(), kingMoves.getWhiteKingMoves());
 						break;
 					}
 					default:
@@ -92,7 +90,7 @@ namespace AutoChess {
 			}
 		}
 
-		return moves;
+		return (*moves);
 	}
 
 	std::list<ChessState> ChessRules::getBlackMoves(ChessState &currentState)

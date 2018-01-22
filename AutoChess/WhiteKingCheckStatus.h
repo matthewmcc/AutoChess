@@ -28,19 +28,19 @@ namespace AutoChess {
 
 		inline bool isSafeFromKnights();
 		inline ChessTile getKnightAttackTile(int knightArrayIndex);
-		inline bool tileNotBlackKnight(ChessTile tileToCheck);
+		inline bool tileIsBlackKnight(ChessTile tileToCheck);
 
 		bool isSafeFromDiagonalMoves();
 		bool unsafeDiagonalMove(int diagonalArrayIndex);
 		ChessTile getDiagonalAttackTile(int diagonalArrayIndex, int moveLengthMultipler);
-		bool tileNotBlackDiagonalPiece(ChessTile tileToTest, int moveLengthMultipler);
+		bool tileIsBlackDiagonalPiece(ChessTile tileToTest, int moveLengthMultipler);
 		bool haltBlackDiagonalSearch(ChessTile tileToTest, int moveLengthMultipler);
 
 
 		bool isSafeFromStraightMoves();
 		bool unsafeStraightMove(int straightArrayIndex);
 		ChessTile getStraightAttackTile(int straightArrayIndex, int moveLengthMultipler);
-		bool tileNotBlackStraightPiece(ChessTile tileToTest, int moveLengthMultipler);
+		bool tileIsBlackStraightPiece(ChessTile tileToTest, int moveLengthMultipler);
 		bool haltBlackStraightSearch(ChessTile tileToTest, int moveLengthMultipler);
 	};
 }

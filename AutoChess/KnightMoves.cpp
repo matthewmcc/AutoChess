@@ -24,51 +24,37 @@ namespace AutoChess {
 
 	void KnightMoves::addBlackDirectionMoves(int moveArrayIndex)
 	{
-		int moveLengthMultipler = 1;
-		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
+		ChessTile moveToTile = createMoveTile(moveArrayIndex);
 
-		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
-		{
-			if (isLegalBlackMove(moveToTile))
-				addPossibleMove(moveToTile);
-			else
-				return;
-
-			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
-		}
+		if (isLegalBlackMove(moveToTile))
+			addPossibleMove(moveToTile);
 	}
 
 	bool KnightMoves::isLegalBlackMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceWhite(moveToTest));
+		return (moveToTest.isInBoardBounds() &&
+			(CurrentState.isTileEmpty(moveToTest) ||
+			CurrentState.isTilesPieceWhite(moveToTest)));
 	}
 
 	void KnightMoves::addWhiteDirectionMoves(int moveArrayIndex)
 	{
-		int moveLengthMultipler = 1;
-		ChessTile moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
+		ChessTile moveToTile = createMoveTile(moveArrayIndex);
 
-		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
-		{
-			if (isLegalWhiteMove(moveToTile))
-				addPossibleMove(moveToTile);
-			else
-				return;
-
-			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
-		}
+		if (isLegalWhiteMove(moveToTile))
+			addPossibleMove(moveToTile);
 	}
 
-	ChessTile KnightMoves::createNextMoveTile(int moveArrayIndex, int moveLengthMultipler) {
-		ChessTile moveToTile = ChessTile(KnightToMove.getX() + (KNIGHT_MOVES[moveArrayIndex][0] * moveLengthMultipler),
-			KnightToMove.getY() + (KNIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
+	ChessTile KnightMoves::createMoveTile(int moveArrayIndex) {
+		ChessTile moveToTile = ChessTile(KnightToMove.getX() + (KNIGHT_MOVES[moveArrayIndex][0]),
+			KnightToMove.getY() + (KNIGHT_MOVES[moveArrayIndex][1]));
 
 		return moveToTile;
 	}
 
 	bool KnightMoves::isLegalWhiteMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceBlack(moveToTest));
+		return (moveToTest.isInBoardBounds() &&
+			(CurrentState.isTileEmpty(moveToTest) ||
+			CurrentState.isTilesPieceBlack(moveToTest)));
 	}
 
 	void KnightMoves::addPossibleMove(ChessTile &moveToAdd) {

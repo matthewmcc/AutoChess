@@ -17,5 +17,5 @@ Reasons for using unordered_map for board state.
 	- Searching for each piece during make moves function
 
 
-Why can't the king move to a square that contains it's self. 
-How would that happen?
+Pawn, Bishop, Queen and Rook class require more refactoring
+

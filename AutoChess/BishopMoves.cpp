@@ -29,10 +29,14 @@ namespace AutoChess {
 
 		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
 		{
-			if (isLegalBlackMove(moveToTile))
+			if (CurrentState.isTileEmpty(moveToTile))
 				addPossibleMove(moveToTile);
+			else if (CurrentState.isTilesPieceWhite(moveToTile)) {
+				addPossibleMove(moveToTile);
+				break;
+			}
 			else
-				return;
+				break;
 
 			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 		}
@@ -50,25 +54,24 @@ namespace AutoChess {
 
 		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
 		{
-			if (isLegalWhiteMove(moveToTile))
+			if (CurrentState.isTileEmpty(moveToTile))
 				addPossibleMove(moveToTile);
+			else if (CurrentState.isTilesPieceBlack(moveToTile)) {
+				addPossibleMove(moveToTile);
+				break;
+			}
 			else
-				return;
+				break;
 
 			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 		}
 	}
 
 	ChessTile BishopMoves::createNextMoveTile(int moveArrayIndex, int moveLengthMultipler) {
-		ChessTile moveToTile = ChessTile(BishopToMove.getX() + (STRAIGHT_MOVES[moveArrayIndex][0] * moveLengthMultipler),
-			BishopToMove.getY() + (STRAIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
+		ChessTile moveToTile = ChessTile(BishopToMove.getX() + (DIAGONAL_MOVES[moveArrayIndex][0] * moveLengthMultipler),
+			BishopToMove.getY() + (DIAGONAL_MOVES[moveArrayIndex][1] * moveLengthMultipler));
 
 		return moveToTile;
-	}
-
-	bool BishopMoves::isLegalWhiteMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceBlack(moveToTest));
 	}
 
 	void BishopMoves::addPossibleMove(ChessTile &moveToAdd) {

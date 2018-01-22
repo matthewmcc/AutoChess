@@ -69,9 +69,8 @@ namespace AutoChess {
 			return BoardState[tile.getX()][tile.getY()] <= WHITES_HIGHEST_ASCII_VALUE;
 		};
 
-		inline ChessTile getBlackKingLocation();
-
-		inline ChessTile getWhiteKingLocation();
+		ChessTile getBlackKingLocation();
+		ChessTile getWhiteKingLocation();
 
 	private:
 		char BoardState[8][8];
@@ -88,20 +87,18 @@ namespace AutoChess {
 		void setLastMove(ChessMove lastMove) { LastMove = lastMove; };
 		void makeMove(ChessMove move);
 
-		inline char setWhichPlayersTurn(char whichPlayersTurn) { WhichPlayersTurn = whichPlayersTurn; };
-		inline void setTurnToNextPlayer() {
-			if (WhichPlayersTurn == BLACK_PLAYER)
-				WhichPlayersTurn = WHITE_PLAYER;
-			else
-				WhichPlayersTurn = BLACK_PLAYER;
-
-			IsMaxPlayer = !IsMaxPlayer;
-		};
+		inline void setWhichPlayersTurn(char whichPlayersTurn) { WhichPlayersTurn = whichPlayersTurn; };
 
 		inline void setIsMaxPlayer(bool isMaxPlayer) { IsMaxPlayer = isMaxPlayer; };
 
 		inline ChessTile getPieceLocation(char pieceToFind);
+
+		inline void calculateHeuristicsValue(ChessState lastState, char pieceTaken);
+		inline void setNextPlayer(ChessState lastState);
 	};
 
-	class PieceNotFoundException : public std::exception {};
+	class PieceNotFoundException : public std::exception {
+	public:
+		PieceNotFoundException(ChessState currentState, char pieceNotFound) {};
+	};
 }

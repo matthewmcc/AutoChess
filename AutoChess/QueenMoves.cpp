@@ -29,18 +29,17 @@ namespace AutoChess {
 
 		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
 		{
-			if (isLegalBlackMove(moveToTile))
+			if (CurrentState.isTileEmpty(moveToTile))
 				addPossibleMove(moveToTile);
+			else if (CurrentState.isTilesPieceWhite(moveToTile)) {
+				addPossibleMove(moveToTile);
+				break;
+			}
 			else
-				return;
+				break;
 
 			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 		}
-	}
-
-	bool QueenMoves::isLegalBlackMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceWhite(moveToTest));
 	}
 
 	void QueenMoves::addWhiteDirectionMoves(int moveArrayIndex)
@@ -50,10 +49,14 @@ namespace AutoChess {
 
 		for (; moveToTile.isInBoardBounds(); moveLengthMultipler++)
 		{
-			if (isLegalWhiteMove(moveToTile))
+			if (CurrentState.isTileEmpty(moveToTile))
 				addPossibleMove(moveToTile);
+			else if (CurrentState.isTilesPieceBlack(moveToTile)) {
+				addPossibleMove(moveToTile);
+				break;
+			}
 			else
-				return;
+				break;
 
 			moveToTile = createNextMoveTile(moveArrayIndex, moveLengthMultipler);
 		}
@@ -64,11 +67,6 @@ namespace AutoChess {
 			QueenToMove.getY() + (DIAGONAL_STRAIGHT_MOVES[moveArrayIndex][1] * moveLengthMultipler));
 
 		return moveToTile;
-	}
-
-	bool QueenMoves::isLegalWhiteMove(ChessTile moveToTest) {
-		return (CurrentState.isTileEmpty(moveToTest) ||
-			CurrentState.isTilesPieceBlack(moveToTest));
 	}
 
 	void QueenMoves::addPossibleMove(ChessTile &moveToAdd) {

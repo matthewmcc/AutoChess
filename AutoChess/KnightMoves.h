@@ -15,8 +15,8 @@ namespace AutoChess {
 			KnightToMove = rookToMove;
 		};
 
-		inline std::list<ChessState> getBlackKnightMoves();
-		inline std::list<ChessState> getWhiteKnightMoves();
+		std::list<ChessState> getBlackKnightMoves();
+		std::list<ChessState> getWhiteKnightMoves();
 
 	private:
 		std::list<ChessState> PossibleMoves;
@@ -29,7 +29,7 @@ namespace AutoChess {
 		void addWhiteDirectionMoves(int moveArrayIndex);
 		bool isLegalWhiteMove(ChessTile moveToTest);
 
-		ChessTile createNextMoveTile(int moveArrayIndex, int moveLengthMultipler);
+		ChessTile createMoveTile(int moveArrayIndex);
 		void addPossibleMove(ChessTile &moveToAdd);
 	};
 }

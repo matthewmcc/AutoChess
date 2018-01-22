@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ChessState.h"
+
 #include <algorithm>
 
 namespace AutoChess {
@@ -12,6 +13,8 @@ namespace AutoChess {
 		chessState.setWhichPlayersTurn(WHITE_PLAYER);
 		chessState.setHeuristsValue(0);
 		chessState.setIsMaxPlayer(isMaxPlayer);
+
+		return chessState;
 	}
 
 	// Creates a new state given the current board state and a move to do.
@@ -20,7 +23,9 @@ namespace AutoChess {
 		ChessState newState = ChessState();
 
 		newState.copyBoardState(*this);
+		newState.calculateHeuristicsValue(*this, getBoardTile(moveToDo.getMoveToTile()));
 		newState.makeMove(moveToDo);
+		newState.setNextPlayer(*this);
 
 		return newState;
 	}
@@ -43,6 +48,22 @@ namespace AutoChess {
 		setBoardTile(move.getMoveFromTile(), EMPTY_TILE);
 
 		LastMove = move;
+	}
+
+	void ChessState::calculateHeuristicsValue(ChessState lastState, char pieceTaken) {
+		if (IsMaxPlayer)
+			setHeuristsValue(lastState.getHeuristsValue() + PIECE_VALUES.at(pieceTaken));
+		else 
+			setHeuristsValue(lastState.getHeuristsValue() - PIECE_VALUES.at(pieceTaken));
+	}
+
+	void ChessState::setNextPlayer(ChessState lastState) {
+		if (lastState.getWhichPlayersTurn() == BLACK_PLAYER)
+			setWhichPlayersTurn(WHITE_PLAYER);
+		else
+			setWhichPlayersTurn(BLACK_PLAYER);
+
+		IsMaxPlayer = !lastState.isMaxPlayer();
 	}
 
 	// If this is the first board created it'll have this structure.
@@ -81,6 +102,6 @@ namespace AutoChess {
 			}
 		}
 
-		throw PieceNotFoundException();
+		throw PieceNotFoundException(*this, pieceToFind);
 	}
 }

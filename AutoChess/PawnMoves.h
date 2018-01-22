@@ -24,22 +24,31 @@ namespace AutoChess {
 		ChessState CurrentState;
 		ChessTile PawnToMove;
 
-		inline void blackStraightMoves();
-		inline void blackTwoTileStraightMove();
-
+		inline void blackStraightMove();
+		inline void doubleBlackStraightMove();
 		inline void blackOffensiveMoves();
-		inline void blackAddLegalMove(ChessTile&);
 
-		inline ChessTile createNextBlackMoveTile(int);
+		inline bool blackAddLegalMove(ChessTile&);
+		inline void blackAddLegalOffensiveMove(ChessTile&);
 
-		inline void whiteStraightMoves();
-		inline void whiteTwoTileStraightMove();
+		inline ChessTile createBlackMoveTile(int);
+		inline ChessTile createBlackOffensiveMoveTile(int);
 
+		inline void addBlackPossibleMove(ChessTile &moveToAdd);
+		inline ChessState isBlackPawnUpgrade(ChessState stateToCheck);
+
+
+		inline void whiteStraightMove();
+		inline void doubleWhiteStraightMove();
 		inline void whiteOffensiveMoves();
-		inline void whiteAddLegalMove(ChessTile&);
 
-		inline ChessTile createNextWhiteMoveTile(int);
+		inline bool whiteAddLegalMove(ChessTile&);
+		inline void whiteAddLegalOffensiveMove(ChessTile&);
 
-		inline void addPossibleMove(ChessTile&);
+		inline ChessTile createWhiteMoveTile(int);
+		inline ChessTile createWhiteOffensiveMoveTile(int);
+
+		inline void addWhitePossibleMove(ChessTile &moveToAdd);
+		inline ChessState isWhitePawnUpgrade(ChessState stateToCheck);
 	};
 }
